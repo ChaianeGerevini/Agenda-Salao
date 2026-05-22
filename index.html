@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Agenda do Salão</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- =========================
+FULLCALENDAR (CORRIGIDO)
+========================= -->
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- =========================
+TOPO
+========================= -->
+<header class="topo">
+
+<div class="logo-area">
+<img src="logo.png" id="logo">
+
+<div>
+<h1>Tainara's Motta Studio</h1>
+<p>Organize seus atendimentos</p>
+</div>
+
+</div>
+
+</header>
+
+
+<!-- =========================
+CALENDÁRIO
+========================= -->
+<section class="agenda">
+<div id="calendar"></div>
+</section>
+
+</div>
+
+
+<!-- =========================
+MODAL NOVO AGENDAMENTO
+========================= -->
+<div id="modal" class="modal">
+
+<div class="modal-content">
+
+<h2>Novo Agendamento</h2>
+
+<input id="cliente" placeholder="Nome da cliente *">
+<input id="telefone" placeholder="Telefone">
+<input id="procedimento" placeholder="Procedimento *">
+<input id="profissional" placeholder="Profissional *">
+
+<label>Data *</label>
+<input id="data" type="date">
+
+<label>Horário de início *</label>
+<input id="hora" type="time">
+
+<label>Horário de fim *</label>
+<input id="fim" type="time">
+
+<label>Cor</label>
+<select id="cor">
+  <option value="#d4af37">Dourado</option>
+  <option value="#3498db">Azul</option>
+  <option value="#e74c3c">Vermelho</option>
+  <option value="#2ecc71">Verde</option>
+  <option value="#9b59b6">Roxo</option>
+</select>
+
+<br><br>
+
+<button onclick="salvar()">Salvar</button>
+<button onclick="fecharModal()">Cancelar</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+MODAL VISUALIZAÇÃO
+========================= -->
+<div id="viewModal" class="modal">
+
+<div class="modal-content">
+
+<h2>Detalhes do Agendamento</h2>
+
+<div id="infoAgendamento"></div>
+
+<button onclick="remarcar()" style="background:#3498db;color:white;">
+Remarcar
+</button>
+
+<button onclick="cancelar()" style="background:#e74c3c;color:white;">
+Cancelar
+</button>
+
+<button onclick="fecharView()">
+Fechar
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+MODAL REMARCAR
+========================= -->
+<div id="remarcarModal" class="modal">
+
+<div class="modal-content">
+
+<h2>Remarcar Agendamento</h2>
+
+<label>Nova data</label>
+<input id="novaData" type="date">
+
+<label>Novo horário início</label>
+<input id="novaHora" type="time">
+
+<label>Novo horário fim</label>
+<input id="novoFim" type="time">
+
+<br><br>
+
+<button onclick="confirmarRemarcacao()" style="background:#3498db;color:white;">
+Confirmar
+</button>
+
+<button onclick="fecharRemarcar()">
+Cancelar
+</button>
+
+</div>
+
+</div>
+
+
+<!-- =========================
+SCRIPTS
+========================= -->
+
+<!-- FullCalendar (CORRIGIDO) -->
+<script src="https://unpkg.com/fullcalendar@6.1.15/index.global.min.js"></script>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Seus arquivos -->
+<script src="supabase.js"></script>
+<script src="app.js"></script>
+<div id="painelDia" class="painel-dia">
+
+<div class="painel-header">
+<h3>Agenda do Dia</h3>
+<button onclick="fecharPainel()">✖</button>
+</div>
+
+<div id="conteudoDia"></div>
+
+</div>
+</body>
+</html>

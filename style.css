@@ -1,0 +1,280 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+
+background:
+linear-gradient(
+135deg,
+#fff8ea,
+#fefefe
+);
+
+font-family:
+"Segoe UI",
+sans-serif;
+min-height:100vh;
+padding:40px;
+}
+
+.container{
+max-width:1400px;
+margin:auto;
+}
+
+.topo{
+background:
+linear-gradient(
+135deg,
+#1e1b1b,
+#30251a
+);
+
+border-radius:30px;
+padding:35px;
+margin-bottom:30px;
+box-shadow:
+0 20px 50px rgba(0,0,0,.15);
+}
+
+.logo-area{
+display:flex;
+align-items:center;
+gap:25px;
+}
+
+#logo{
+width:120px;
+height:120px;
+object-fit:contain;
+background:white;
+border-radius:20px;
+padding:15px;
+}
+
+.topo h1{
+color:#d4af37;
+font-size:42px;
+}
+
+.topo p{
+color:#f7e7b6;
+margin-top:8px;
+font-size:18px;
+}
+
+.agenda{
+background:white;
+padding:30px;
+border-radius:30px;
+box-shadow:
+0 10px 40px rgba(0,0,0,.08);
+}
+
+/* Calendário */
+
+.fc{
+color:#333;
+}
+
+.fc-toolbar-title{
+font-size:32px !important;
+color:#8b6b17;
+}
+
+/* Espaçamento entre botões */
+
+.fc-toolbar-chunk{
+display:flex;
+gap:10px;
+}
+
+.fc-button-group{
+display:flex !important;
+gap:10px;
+}
+
+.fc-button{
+background:#d4af37 !important;
+
+border:none !important;
+
+padding:10px 18px !important;
+
+border-radius:14px !important;background:#d4af37 !important;
+
+border:none !important;
+
+padding:10px 18px !important;
+
+border-radius:14px !important;
+}
+
+.fc-button:hover{
+transform:translateY(-2px);
+
+}
+
+.fc-event{
+
+background:#d4af37 !important;
+
+border:none !important;
+
+border-radius:12px !important;
+
+padding:4px;
+
+}
+
+.fc-scrollgrid{
+
+border-radius:20px;
+
+overflow:hidden;
+
+}
+
+.fc-col-header-cell{
+
+background:#fff4d2;
+
+}
+
+.fc-daygrid-day:hover,
+.fc-timegrid-slot:hover{
+
+background:#fffaf0;
+}
+
+@media(max-width:900px){
+
+.logo-area{
+flex-direction:column;
+text-align:center;
+}
+
+.topo h1{
+font-size:30px;
+}
+
+}
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+
+justify-content:center;
+align-items:center;
+
+z-index:9999;
+}
+
+.modal-content{
+background:white;
+padding:30px;
+border-radius:20px;
+width:350px;
+display:flex;
+flex-direction:column;
+gap:10px;
+box-shadow:0 20px 60px rgba(0,0,0,.3);
+position: relative;
+z-index: 10000;
+}
+
+.modal-content h2{
+color:#d4af37;
+margin-bottom:10px;
+}
+
+.modal-content input{
+padding:10px;
+border-radius:10px;
+border:1px solid #ddd;
+outline:none;
+}
+
+.modal-content button{
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+}
+
+.modal-content button:first-of-type{
+background:#d4af37;
+color:white;
+}
+
+.modal-content button:last-of-type{
+background:#eee;
+}
+
+#infoAgendamento{
+display:flex;
+flex-direction:column;
+gap:8px;
+margin:10px 0;
+color:#333;
+}
+
+#infoAgendamento p{
+padding:6px;
+background:#f7f7f7;
+border-radius:8px;
+}
+
+.modal-content button{
+padding:10px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+margin-top:5px;
+}
+
+.modal-content button:nth-child(2){
+background:#d4af37;
+color:white;
+}
+
+.modal-content button:nth-child(3){
+background:#e74c3c;
+color:white;
+}
+
+.modal-content button:nth-child(4){
+background:#ccc;
+}
+
+.painel-dia{
+position: fixed;
+right: -350px;
+top: 0;
+width: 350px;
+height: 100vh;
+background: white;
+box-shadow: -10px 0 30px rgba(0,0,0,.15);
+transition: .3s;
+padding: 20px;
+z-index: 9999;
+overflow-y: auto;
+}
+
+.painel-dia.ativo{
+right: 0;
+}
+
+.painel-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}

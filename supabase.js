@@ -1,0 +1,5 @@
+const SUPABASE_URL = "https://tcaluxgbwnjtsdanfzgl.supabase.co"
+
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRjYWx1eGdid25qdHNkYW5memdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NjgyMDgsImV4cCI6MjA5NTA0NDIwOH0.5oL7DNdhFZqVUHKNjw8FthRVr9O187SOxKHEMfuHkYI"
+
+window.sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
