@@ -8,12 +8,6 @@
 <title>Agenda do Salão</title>
 
 <link rel="stylesheet" href="style.css">
-
-<!-- =========================
-FULLCALENDAR (CORRIGIDO)
-========================= -->
-
-
 </head>
 
 <body>
@@ -25,154 +19,218 @@ TOPO
 ========================= -->
 <header class="topo">
 
-<div class="logo-area">
-<img src="logo.png" id="logo">
+  <div class="logo-area">
+    <img src="/assets/logoTM(1).png" id="logo">
 
-<div>
-<h1>Tainara's Motta Studio</h1>
-<p>Organize seus atendimentos</p>
-</div>
+    <div>
+      <h1>Tainara's Motta Studio</h1>
+      <p>Organize seus atendimentos</p>
+    </div>
 
-</div>
+  </div>
 
 </header>
 
+<!-- =========================
+AÇÕES
+========================= -->
+<div class="acoes-agenda">
+
+  <button id="novoAtendimento">＋ Novo Atendimento</button>
+
+  <button id="btnProfissionais" onclick="abrirProfissionais()">
+    Profissionais
+  </button>
+
+  <select id="filtroProfissional" onchange="filtrarProfissional()">
+    <option value="todos">Todos profissionais</option>
+  </select>
+
+</div>
 
 <!-- =========================
 CALENDÁRIO
 ========================= -->
 <section class="agenda">
-<div id="calendar"></div>
+  <div id="calendar"></div>
 </section>
 
 </div>
 
-
 <!-- =========================
-MODAL NOVO AGENDAMENTO
+MODAL AGENDAMENTO
 ========================= -->
 <div id="modal" class="modal">
 
-<div class="modal-content">
+  <div class="modal-content">
 
-<h2>Novo Agendamento</h2>
+    <h2>Novo Agendamento</h2>
 
-<input id="cliente" placeholder="Nome da cliente *">
-<input id="telefone" placeholder="Telefone">
-<input id="procedimento" placeholder="Procedimento *">
-<input id="profissional" placeholder="Profissional *">
+    <input id="cliente" placeholder="Nome da cliente *">
+    <input id="telefone" placeholder="Telefone">
+    <input id="procedimento" placeholder="Procedimento *">
 
-<label>Data *</label>
-<input id="data" type="date">
+    <select id="profissional"></select>
 
-<label>Horário de início *</label>
-<input id="hora" type="time">
+    <label>Data *</label>
+    <input id="data" type="date">
 
-<label>Horário de fim *</label>
-<input id="fim" type="time">
+    <label>Horário de início *</label>
+    <input id="hora" type="time">
 
-<label>Cor</label>
-<select id="cor">
-  <option value="#d4af37">Dourado</option>
-  <option value="#3498db">Azul</option>
-  <option value="#e74c3c">Vermelho</option>
-  <option value="#2ecc71">Verde</option>
-  <option value="#9b59b6">Roxo</option>
-</select>
+    <label>Horário de fim *</label>
+    <input id="fim" type="time">
 
-<br><br>
+    <br>
 
-<button onclick="salvar()">Salvar</button>
-<button onclick="fecharModal()">Cancelar</button>
+    <button onclick="salvar()">Salvar</button>
+    <button onclick="fecharModal()">Cancelar</button>
+
+  </div>
 
 </div>
-
-</div>
-
 
 <!-- =========================
-MODAL VISUALIZAÇÃO
+MODAL DETALHES
 ========================= -->
 <div id="viewModal" class="modal">
 
-<div class="modal-content">
+  <div class="modal-content modal-detalhes">
 
-<h2>Detalhes do Agendamento</h2>
+    <button class="btn-fechar-x" onclick="fecharView()">✕</button>
 
-<div id="infoAgendamento"></div>
+    <h2>Detalhes do Agendamento</h2>
 
-<button onclick="remarcar()" style="background:#3498db;color:white;">
-Remarcar
-</button>
+    <div id="infoAgendamento"></div>
 
-<button onclick="cancelar()" style="background:#e74c3c;color:white;">
-Cancelar
-</button>
+    <div class="acoes-modal">
+      <button class="btn-acoes btn-remarcar">Remarcar</button>
+      <button class="btn-acoes btn-cancelar">Cancelar</button>
+    </div>
 
-<button onclick="fecharView()">
-Fechar
-</button>
+  </div>
 
 </div>
 
-</div>
+<!-- =========================
+MODAL EDITAR
+========================= -->
+<div id="editModal" class="modal">
 
+  <div class="modal-content">
+
+    <h2>Editar Agendamento</h2>
+
+    <input id="editCliente" placeholder="Cliente">
+    <input id="editProcedimento" placeholder="Procedimento">
+
+    <select id="editProfissional"></select>
+
+    <label>Data</label>
+    <input id="editData" type="date">
+
+    <label>Hora início</label>
+    <input id="editHora" type="time">
+
+    <label>Hora fim</label>
+    <input id="editFim" type="time">
+
+    <br>
+
+    <button onclick="salvarEdicao()">Salvar alterações</button>
+    <button onclick="fecharEdit()">Cancelar</button>
+
+  </div>
+
+</div>
 
 <!-- =========================
 MODAL REMARCAR
 ========================= -->
 <div id="remarcarModal" class="modal">
 
-<div class="modal-content">
+  <div class="modal-content">
 
-<h2>Remarcar Agendamento</h2>
+    <h2>Remarcar Agendamento</h2>
 
-<label>Nova data</label>
-<input id="novaData" type="date">
+    <label>Nova data</label>
+    <input id="novaData" type="date">
 
-<label>Novo horário início</label>
-<input id="novaHora" type="time">
+    <label>Novo horário início</label>
+    <input id="novaHora" type="time">
 
-<label>Novo horário fim</label>
-<input id="novoFim" type="time">
+    <label>Novo horário fim</label>
+    <input id="novoFim" type="time">
 
-<br><br>
+    <br>
 
-<button onclick="confirmarRemarcacao()" style="background:#3498db;color:white;">
-Confirmar
-</button>
+    <button onclick="confirmarRemarcacao()">Confirmar</button>
+    <button onclick="fecharRemarcar()">Cancelar</button>
 
-<button onclick="fecharRemarcar()">
-Cancelar
-</button>
+  </div>
 
 </div>
 
+<!-- =========================
+MODAL PROFISSIONAIS
+========================= -->
+<div id="modalProfissionais" class="modal">
+
+  <div class="modal-content">
+
+    <h2>Profissionais</h2>
+
+    <input id="nomeProfissional" placeholder="Nome do profissional">
+
+    <label>Cor do profissional</label>
+    <input type="color" id="corProfissional" value="#d4af37">
+
+    <button onclick="salvarProfissional()">Salvar</button>
+    <button onclick="fecharProfissionais()">Fechar</button>
+
+    <hr>
+
+    <div id="listaProfissionais"></div>
+
+  </div>
+
 </div>
 
+<!-- =========================
+PAINEL DIA
+========================= -->
+<div id="painelDia" class="painel-dia">
+
+  <div class="painel-header">
+    <h3>Agenda do Dia</h3>
+    <button onclick="fecharPainel()">✖</button>
+  </div>
+
+  <div id="conteudoDia"></div>
+
+</div>
 
 <!-- =========================
 SCRIPTS
 ========================= -->
-
-<!-- FullCalendar (CORRIGIDO) -->
 <script src="https://unpkg.com/fullcalendar@6.1.15/index.global.min.js"></script>
-
-<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<!-- Seus arquivos -->
 <script src="supabase.js"></script>
 <script src="app.js"></script>
-<div id="painelDia" class="painel-dia">
 
-<div class="painel-header">
-<h3>Agenda do Dia</h3>
-<button onclick="fecharPainel()">✖</button>
-</div>
+<!-- botão garantir abertura -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("novoAtendimento")
 
-<div id="conteudoDia"></div>
+  if (btn) {
+    btn.addEventListener("click", () => {
+      document.getElementById("modal").style.display = "flex"
+    })
+  }
+})
+</script>
 
-</div>
 </body>
 </html>
