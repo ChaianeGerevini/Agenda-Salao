@@ -2,6 +2,7 @@ let calendar
 let selectedDate = null
 let eventoSelecionado = null
 let profissionaisCache = []
+let profissionalEditando = null
 
 // ==========================
 // HELPERS
@@ -28,22 +29,9 @@ function gerarPastel(hex) {
 }
 
 // ==========================
-// SUPABASE TESTE
-// ==========================
-async function testarConexao() {
-  const { data, error } = await window.sb
-    .from("agendamentos")
-    .select("*")
-
-  console.log("DADOS:", data)
-  console.log("ERRO:", error)
-}
-
-// ==========================
 // PROFISSIONAIS
 // ==========================
 async function carregarProfissionais() {
-
   const { data, error } = await window.sb
     .from("profissionais")
     .select("*")
@@ -54,26 +42,26 @@ async function carregarProfissionais() {
   profissionaisCache = data || []
 
   const select = document.getElementById("profissional")
-  const filtro = document.getElementById("filtroProfissional")
+  const editSelect = document.getElementById("editProfissional")
 
   if (select) select.innerHTML = `<option value="">Selecione profissional</option>`
-  if (filtro) filtro.innerHTML = `<option value="todos">Filtrar todos</option>`
+  if (editSelect) editSelect.innerHTML = `<option value="">Selecione profissional</option>`
 
   profissionaisCache.forEach(p => {
-
     if (select) {
       const opt = document.createElement("option")
       opt.value = p.id
-      opt.textContent = p.nome
+      opt.textContent = `⬤ ${p.nome}`
       opt.dataset.cor = p.cor
       select.appendChild(opt)
     }
 
-    if (filtro) {
+    if (editSelect) {
       const opt = document.createElement("option")
       opt.value = p.id
-      opt.textContent = p.nome
-      filtro.appendChild(opt)
+      opt.textContent = `⬤ ${p.nome}`
+      opt.dataset.cor = p.cor
+      editSelect.appendChild(opt)
     }
   })
 
@@ -81,83 +69,20 @@ async function carregarProfissionais() {
 }
 
 // ==========================
-// SALVAR PROFISSIONAL
-// ==========================
-window.salvarProfissional = async function () {
-
-  const nome = document.getElementById("nomeProfissional").value.trim()
-  const cor = document.getElementById("corProfissional").value
-
-  if (!nome) return alert("Digite o nome do profissional")
-
-  const { error } = await window.sb
-    .from("profissionais")
-    .insert([{ nome, cor, ativo: true }])
-
-  if (error) return alert("Erro ao salvar")
-
-  document.getElementById("nomeProfissional").value = ""
-
-  fecharProfissionais()
-  carregarProfissionais()
-}
-
-// ==========================
-// EDITAR PROFISSIONAL
-// ==========================
-window.editarProfissional = async function (id) {
-
-  const nome = prompt("Novo nome:")
-  const cor = prompt("Nova cor (hex):", "#d4af37")
-
-  if (!nome) return
-
-  await window.sb
-    .from("profissionais")
-    .update({ nome, cor })
-    .eq("id", id)
-
-  carregarProfissionais()
-}
-
-// ==========================
-// EXCLUIR PROFISSIONAL
-// ==========================
-window.excluirProfissional = async function (id) {
-
-  await window.sb
-    .from("profissionais")
-    .update({ ativo: false })
-    .eq("id", id)
-
-  carregarProfissionais()
-}
-
-// ==========================
-// RENDER PROFISSIONAIS
+// LISTA PROFISSIONAIS
 // ==========================
 function renderProfissionais() {
-
   const container = document.getElementById("listaProfissionais")
   if (!container) return
 
   container.innerHTML = profissionaisCache.map(p => `
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      padding:10px;
-      margin:6px 0;
-      border-left:5px solid ${p.cor};
-      background:#f7f7f7;
-      border-radius:8px;
-      align-items:center;
-    ">
-      <div>
-        <b>${p.nome}</b><br>
-        <small>${p.cor}</small>
+    <div class="card-profissional">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:14px;height:14px;border-radius:50%;background:${p.cor}"></div>
+        <b>${p.nome}</b>
       </div>
 
-      <div style="display:flex; gap:6px;">
+      <div>
         <button onclick="editarProfissional('${p.id}')">✏️</button>
         <button onclick="excluirProfissional('${p.id}')">🗑️</button>
       </div>
@@ -166,74 +91,86 @@ function renderProfissionais() {
 }
 
 // ==========================
-// EVENTO CLIQUE (DETALHES + AÇÕES)
+// DETALHES EVENTO
 // ==========================
-window.eventoSelecionado = null
-
 function abrirDetalhes(evento) {
-
   eventoSelecionado = evento
+
+  const d = evento.extendedProps || {}
 
   const inicio = new Date(evento.start)
   const fim = new Date(evento.end)
 
-  const horaFormatada = `${inicio.toLocaleDateString()} ${inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${fim.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
-
-  const [cliente, procedimento] = evento.title.split(" - ")
+  const hora = `
+${inicio.toLocaleDateString()}
+${inicio.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+—
+${fim.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+`
 
   document.getElementById("infoAgendamento").innerHTML = `
-    <p><b>Cliente:</b> ${cliente}</p>
-    <p><b>Profissional:</b> ${procedimento}</p>
-    <p><b>Hora marcada:</b> ${horaFormatada}</p>
+    <div><b>Cliente:</b> ${d.cliente || "-"}</div>
+    <div><b>Procedimento:</b> ${d.procedimento || "-"}</div>
+    <div><b>Profissional:</b> ${d.profissional || "-"}</div>
+    <div><b>Horário:</b> ${hora}</div>
   `
+
+  document.querySelector(".btn-remarcar").onclick = abrirRemarcar
+  document.querySelector(".btn-cancelar").onclick = cancelar
 
   document.getElementById("viewModal").style.display = "flex"
 }
 
 // ==========================
-// CANCELAR AGENDAMENTO
+// CANCELAR
 // ==========================
 window.cancelar = async function () {
-
   if (!eventoSelecionado) return
 
-  await window.sb
+  const { error } = await window.sb
     .from("agendamentos")
     .update({ status: "cancelado" })
     .eq("id", eventoSelecionado.id)
 
+  if (error) return alert("Erro ao cancelar")
+
+  calendar.refetchEvents()
+  fecharView()
+}
+
+// ==========================
+// REMARCAR
+// ==========================
+function abrirRemarcar() {
+  document.getElementById("remarcarModal").style.display = "flex"
+}
+
+function fecharRemarcar() {
+  document.getElementById("remarcarModal").style.display = "none"
+}
+
+async function confirmarRemarcacao() {
+  const data = document.getElementById("novaData").value
+  const hora = document.getElementById("novaHora").value
+  const fim = document.getElementById("novoFim").value
+
+  if (!data || !hora || !fim) return alert("Preencha todos os campos")
+
+  await window.sb
+    .from("agendamentos")
+    .update({
+      inicio: toLocalISO(data, hora),
+      fim: toLocalISO(data, fim)
+    })
+    .eq("id", eventoSelecionado.id)
+
+  fecharRemarcar()
   fecharView()
   calendar.refetchEvents()
 }
 
 // ==========================
-// REMARCAR (rápido)
-// ==========================
-window.remarcar = function () {
-
-  if (!eventoSelecionado) return
-
-  const novaData = prompt("Nova data (YYYY-MM-DD):")
-  const novaHora = prompt("Novo horário início (HH:MM):")
-  const novoFim = prompt("Novo horário fim (HH:MM):")
-
-  if (!novaData || !novaHora || !novoFim) return
-
-  const inicio = toLocalISO(novaData, novaHora)
-  const fim = toLocalISO(novaData, novoFim)
-
-  window.sb
-    .from("agendamentos")
-    .update({ inicio, fim })
-    .eq("id", eventoSelecionado.id)
-    .then(() => {
-      fecharView()
-      calendar.refetchEvents()
-    })
-}
-
-// ==========================
-// CALENDÁRIO
+// CALENDÁRIO PRINCIPAL
 // ==========================
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -242,42 +179,55 @@ document.addEventListener("DOMContentLoaded", function () {
   calendar = new FullCalendar.Calendar(calendarEl, {
 
     locale: "pt-br",
+
+    // 📅 SEMPRE ABRE NO MÊS
     initialView: "dayGridMonth",
 
+    height: "auto",
+    expandRows: true,
+    nowIndicator: true,
+    allDaySlot: false,
+
+    slotMinTime: "07:00:00",
+    slotMaxTime: "22:00:00",
+
+    // ❌ SEM BOTÃO "HOJE"
     headerToolbar: {
-      left: "prev,next hoje",
+      left: "prev,next",
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay"
     },
 
-customButtons: {
-  hoje: {
-    text: "Hoje",
-    click: () => {
-      const hoje = new Date()
-      calendar.gotoDate(hoje)
-      calendar.changeView("timeGridDay")
-      mostrarPainelDoDia(hoje)
-    }
-  }
-},
-    buttonText: { today: "Hoje", month: "Mês", week: "Semana", day: "Dia" },
+    buttonText: {
+      month: "Mês",
+      week: "Semana",
+      day: "Dia"
+    },
 
-    dateClick: function (info) {
+    titleFormat: {
+      year: 'numeric',
+      month: 'long'
+    },
+
+    // ==========================
+    // CLICK DIA
+    // ==========================
+    dateClick(info) {
       selectedDate = info.dateStr
       document.getElementById("data").value = info.dateStr
       document.getElementById("modal").style.display = "flex"
     },
 
-    eventClick: function (info) {
-      abrirDetalhes({
-        id: info.event.id,
-        title: info.event.title,
-        start: info.event.start,
-        end: info.event.end
-      })
+    // ==========================
+    // CLICK EVENTO
+    // ==========================
+    eventClick(info) {
+      abrirDetalhes(info.event)
     },
 
+    // ==========================
+    // EVENTOS SUPABASE
+    // ==========================
     events: async function (fetchInfo, successCallback, failureCallback) {
 
       const { data, error } = await window.sb
@@ -286,26 +236,37 @@ customButtons: {
 
       if (error) return failureCallback(error)
 
-      const eventos = data
-        .filter(e => e.status !== "cancelado")
-        .map(e => ({
-          id: e.id,
-          title: `${e.cliente} - ${e.procedimento}`,
-          start: e.inicio,
-          end: e.fim,
-          backgroundColor: gerarPastel(e.cor),
-          borderColor: e.cor,
-          textColor: "#333",
-          display: "block"
-        }))
+      const eventos = data.filter(e => e.status !== "cancelado")
 
-      successCallback(eventos)
+      successCallback(eventos.map(e => ({
+        id: e.id,
+        title: window.innerWidth < 768
+          ? e.cliente
+          : `${e.cliente} - ${e.procedimento}`,
+        start: e.inicio,
+        end: e.fim,
+        backgroundColor: gerarPastel(e.cor),
+        borderColor: e.cor,
+        textColor: "#333",
+        extendedProps: {
+          cliente: e.cliente,
+          procedimento: e.procedimento,
+          profissional: e.profissional
+        }
+      })))
     }
   })
 
   calendar.render()
+
+  // ==========================
+  // RESIZE LIMPO (SEM BUG)
+  // ==========================
+  window.addEventListener("resize", () => {
+    calendar.updateSize()
+  })
+
   carregarProfissionais()
-  testarConexao()
 })
 
 // ==========================
@@ -325,62 +286,4 @@ function fecharModal() {
 
 function fecharView() {
   document.getElementById("viewModal").style.display = "none"
-}
-
-// ==========================
-// SALVAR AGENDAMENTO
-// ==========================
-async function salvar() {
-
-  const cliente = document.getElementById("cliente").value
-  const procedimento = document.getElementById("procedimento").value
-
-  const select = document.getElementById("profissional")
-  const option = select.options[select.selectedIndex]
-
-  if (!option?.value) return alert("Selecione profissional")
-
-  const profissional_id = option.value
-  const profissional_nome = option.textContent
-  const cor = option.dataset.cor
-
-  const data = document.getElementById("data").value
-  const hora = document.getElementById("hora").value
-  const fim = document.getElementById("fim").value
-
-  const inicio = toLocalISO(data, hora)
-  const fimISO = toLocalISO(data, fim)
-
-  const { data: existentes } = await window.sb
-    .from("agendamentos")
-    .select("*")
-
-  const conflito = existentes.find(e =>
-    e.profissional_id === profissional_id &&
-    new Date(inicio) < new Date(e.fim) &&
-    new Date(fimISO) > new Date(e.inicio)
-  )
-
-  if (conflito) {
-    alert("Profissional ocupado nesse horário")
-    return
-  }
-
-  const { error } = await window.sb
-    .from("agendamentos")
-    .insert([{
-      cliente,
-      procedimento,
-      profissional_id,
-      profissional: profissional_nome,
-      cor,
-      inicio,
-      fim: fimISO,
-      status: "ativo"
-    }])
-
-  if (error) return alert("Erro ao salvar")
-
-  fecharModal()
-  calendar.refetchEvents()
 }

@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>Agenda do Salão</title>
 
 <link rel="stylesheet" href="style.css">
@@ -32,7 +31,7 @@ TOPO
 </header>
 
 <!-- =========================
-AÇÕES
+AÇÕES (DESKTOP ONLY)
 ========================= -->
 <div class="acoes-agenda">
 
@@ -42,10 +41,6 @@ AÇÕES
     Profissionais
   </button>
 
-  <select id="filtroProfissional" onchange="filtrarProfissional()">
-    <option value="todos">Todos profissionais</option>
-  </select>
-
 </div>
 
 <!-- =========================
@@ -54,6 +49,21 @@ CALENDÁRIO
 <section class="agenda">
   <div id="calendar"></div>
 </section>
+
+</div>
+
+<!-- =========================
+FAB (MOBILE)
+========================= -->
+<div class="fab-container">
+
+  <button onclick="document.getElementById('modal').style.display='flex'">
+    ＋
+  </button>
+
+  <button onclick="abrirProfissionais()">
+    👩‍💼
+  </button>
 
 </div>
 
@@ -81,8 +91,6 @@ MODAL AGENDAMENTO
     <label>Horário de fim *</label>
     <input id="fim" type="time">
 
-    <br>
-
     <button onclick="salvar()">Salvar</button>
     <button onclick="fecharModal()">Cancelar</button>
 
@@ -91,13 +99,11 @@ MODAL AGENDAMENTO
 </div>
 
 <!-- =========================
-MODAL DETALHES
+DETALHES DO EVENTO
 ========================= -->
 <div id="viewModal" class="modal">
 
-  <div class="modal-content modal-detalhes">
-
-    <button class="btn-fechar-x" onclick="fecharView()">✕</button>
+  <div class="modal-content">
 
     <h2>Detalhes do Agendamento</h2>
 
@@ -113,7 +119,7 @@ MODAL DETALHES
 </div>
 
 <!-- =========================
-MODAL EDITAR
+EDITAR AGENDAMENTO
 ========================= -->
 <div id="editModal" class="modal">
 
@@ -135,8 +141,6 @@ MODAL EDITAR
     <label>Hora fim</label>
     <input id="editFim" type="time">
 
-    <br>
-
     <button onclick="salvarEdicao()">Salvar alterações</button>
     <button onclick="fecharEdit()">Cancelar</button>
 
@@ -145,7 +149,7 @@ MODAL EDITAR
 </div>
 
 <!-- =========================
-MODAL REMARCAR
+REMARCAR AGENDAMENTO
 ========================= -->
 <div id="remarcarModal" class="modal">
 
@@ -162,8 +166,6 @@ MODAL REMARCAR
     <label>Novo horário fim</label>
     <input id="novoFim" type="time">
 
-    <br>
-
     <button onclick="confirmarRemarcacao()">Confirmar</button>
     <button onclick="fecharRemarcar()">Cancelar</button>
 
@@ -172,7 +174,7 @@ MODAL REMARCAR
 </div>
 
 <!-- =========================
-MODAL PROFISSIONAIS
+PROFISSIONAIS
 ========================= -->
 <div id="modalProfissionais" class="modal">
 
@@ -180,9 +182,7 @@ MODAL PROFISSIONAIS
 
     <h2>Profissionais</h2>
 
-    <input id="nomeProfissional" placeholder="Nome do profissional">
-
-    <label>Cor do profissional</label>
+    <input id="nomeProfissional" placeholder="Nome">
     <input type="color" id="corProfissional" value="#d4af37">
 
     <button onclick="salvarProfissional()">Salvar</button>
@@ -197,20 +197,6 @@ MODAL PROFISSIONAIS
 </div>
 
 <!-- =========================
-PAINEL DIA
-========================= -->
-<div id="painelDia" class="painel-dia">
-
-  <div class="painel-header">
-    <h3>Agenda do Dia</h3>
-    <button onclick="fecharPainel()">✖</button>
-  </div>
-
-  <div id="conteudoDia"></div>
-
-</div>
-
-<!-- =========================
 SCRIPTS
 ========================= -->
 <script src="https://unpkg.com/fullcalendar@6.1.15/index.global.min.js"></script>
@@ -218,19 +204,6 @@ SCRIPTS
 
 <script src="supabase.js"></script>
 <script src="app.js"></script>
-
-<!-- botão garantir abertura -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const btn = document.getElementById("novoAtendimento")
-
-  if (btn) {
-    btn.addEventListener("click", () => {
-      document.getElementById("modal").style.display = "flex"
-    })
-  }
-})
-</script>
 
 </body>
 </html>
