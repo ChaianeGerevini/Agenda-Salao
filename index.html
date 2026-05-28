@@ -19,7 +19,7 @@ TOPO
 <header class="topo">
 
   <div class="logo-area">
-    <img src="/assets/logoTM(1).png" id="logo">
+    <img src="/assets/Gemini_Generated_Image_g9xwaqg9xwaqg9xw(1).png" id="logo">
 
     <div>
       <h1>Tainara's Motta Studio</h1>
@@ -72,11 +72,13 @@ FAB (MOBILE)
 </div>
 
 <!-- =========================
-MODAL AGENDAMENTO
+MODAL AGENDAMENTO - Desktop
 ========================= -->
 <div id="modal" class="modal">
 
   <div class="modal-content">
+
+    <button class="btn-fechar-modal" onclick="fecharNovoModal()">×</button>
 
     <h2>Novo Agendamento</h2>
 
@@ -95,8 +97,9 @@ MODAL AGENDAMENTO
     <label>Horário de fim *</label>
     <input id="fim" type="time">
 
-    <button onclick="salvar()">Salvar</button>
-    <button onclick="fecharNovoModal()">Cancelar</button>
+    <div class="acoes-modal">
+      <button onclick="salvar()">Salvar</button>
+    </div>
 
   </div>
 
@@ -109,13 +112,15 @@ DETALHES DO EVENTO
 
   <div class="modal-content">
 
+    <button class="btn-fechar-modal" onclick="fecharViewModal()">×</button>
+
     <h2>Detalhes do Agendamento</h2>
 
     <div id="infoAgendamento"></div>
 
     <div class="acoes-modal">
       <button class="btn-acoes btn-remarcar">Remarcar</button>
-      <button class="btn-acoes btn-cancelar">Cancelar</button>
+      <button class="btn-acoes btn-cancelar">Cancelar Agendamento</button>
     </div>
 
   </div>
@@ -159,6 +164,8 @@ REMARCAR AGENDAMENTO
 
   <div class="modal-content">
 
+    <button class="btn-fechar-modal" onclick="fecharRemarcar()">×</button>
+
     <h2>Remarcar Agendamento</h2>
 
     <label>Nova data</label>
@@ -171,15 +178,12 @@ REMARCAR AGENDAMENTO
     <input id="novoFim" type="time">
 
     <button onclick="confirmarRemarcacao()">Confirmar</button>
-    <button onclick="fecharRemarcar()">Cancelar</button>
 
   </div>
 
 </div>
 
-<!-- =========================
-PROFISSIONAIS
-========================= -->
+
 <!-- =========================
 FAB (MOBILE)
 ========================= -->
@@ -188,40 +192,6 @@ FAB (MOBILE)
   <button id="fabProfissionais">👩‍💼</button>
 </div>
 
-<!-- =========================
-MODAL AGENDAMENTO
-========================= -->
-<div id="modal" class="modal">
-
-  <div class="modal-content">
-
-    <button class="btn-fechar-modal" onclick="fecharNovoModal()">×</button>
-
-    <h2>Novo Agendamento</h2>
-
-    <input id="cliente" placeholder="Nome da cliente *">
-    <input id="telefone" placeholder="Telefone">
-    <input id="procedimento" placeholder="Procedimento *">
-
-    <select id="profissional"></select>
-
-    <label>Data *</label>
-    <input id="data" type="date">
-
-    <label>Horário de início *</label>
-    <input id="hora" type="time">
-
-    <label>Horário de fim *</label>
-    <input id="fim" type="time">
-
-    <div class="acoes-modal">
-      <button onclick="salvar()">Salvar</button>
-      <button type="button" onclick="fecharNovoModal()">Cancelar</button>
-    </div>
-
-  </div>
-
-</div>
 
 <!-- =========================
 EDITAR AGENDAMENTO
@@ -279,7 +249,7 @@ REMARCAR AGENDAMENTO
 
     <div class="acoes-modal">
       <button onclick="confirmarRemarcacao()">Confirmar</button>
-      <button type="button" onclick="fecharRemarcar()">Cancelar</button>
+      <button type="button" onclick="fecharRemarcar()">Cancelar Agendamento</button>
     </div>
 
   </div>
@@ -287,7 +257,7 @@ REMARCAR AGENDAMENTO
 </div>
 
 <!-- =========================
-PROFISSIONAIS
+PROFISSIONAIS - Desktop
 ========================= -->
 <div id="modalProfissionais" class="modal">
 
@@ -302,7 +272,6 @@ PROFISSIONAIS
 
     <div class="acoes-modal">
       <button onclick="salvarProfissional()">Salvar</button>
-      <button type="button" onclick="fecharProfissionais()">Fechar</button>
     </div>
 
     <hr>

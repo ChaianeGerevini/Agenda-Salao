@@ -29,7 +29,7 @@ function gerarPastel(hex) {
 }
 
 // ==========================
-// PROFISSIONAIS
+// PROFISSIONAIS - Desktop
 // ==========================
 async function carregarProfissionais() {
   const { data, error } = await window.sb
@@ -72,19 +72,20 @@ function renderProfissionais() {
   const container = document.getElementById("listaProfissionais")
   if (!container) return
 
-  container.innerHTML = profissionaisCache.map(p => `
-    <div class="card-profissional">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:14px;height:14px;border-radius:50%;background:${p.cor}"></div>
-        <b>${p.nome}</b>
-      </div>
+container.innerHTML = profissionaisCache.map(p => `
+  <div class="card-profissional">
 
-      <div>
-        <button onclick="editarProfissional('${p.id}')">✏️</button>
-        <button onclick="excluirProfissional('${p.id}')">🗑️</button>
-      </div>
+    <div class="lado-esquerdo">
+      <div class="bolinha" style="background:${p.cor}"></div>
+      <b>${p.nome}</b>
     </div>
-  `).join("")
+
+    <button class="btn-delete" onclick="excluirProfissional('${p.id}')">
+      🗑️
+    </button>
+
+  </div>
+`).join("")
 }
 
 // ==========================
@@ -105,10 +106,14 @@ ${inicio.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
 ${fim.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
 `
 
+  // 🔥 CONVERTE ID → NOME AQUI
+  const nomeProfissional =
+    profissionaisCache.find(p => p.id == d.profissional)?.nome || "-"
+
   document.getElementById("infoAgendamento").innerHTML = `
     <div><b>Cliente:</b> ${d.cliente || "-"}</div>
     <div><b>Procedimento:</b> ${d.procedimento || "-"}</div>
-    <div><b>Profissional:</b> ${d.profissional || "-"}</div>
+    <div><b>Profissional:</b> ${nomeProfissional}</div>
     <div><b>Horário:</b> ${hora}</div>
   `
 
@@ -225,6 +230,19 @@ document.addEventListener("click", (e) => {
 
   calendar = new FullCalendar.Calendar(calendarEl, {
     locale: "pt-br",
+  firstDay: 0,
+
+  buttonText: {
+    today: "Hoje",
+    month: "Mês",
+    week: "Semana",
+    day: "Dia",
+    list: "Lista"
+  },
+
+  allDayText: "Dia inteiro",
+  moreLinkText: "mais",
+
     initialView: "dayGridMonth",
     height: "100%",
 
@@ -246,29 +264,37 @@ document.addEventListener("click", (e) => {
 
     events: async function (fetchInfo, successCallback, failureCallback) {
 
-      const { data, error } = await window.sb
-        .from("agendamentos")
-        .select("*")
+  const { data, error } = await window.sb
+    .from("agendamentos")
+    .select("*")
 
-      if (error) return failureCallback(error)
+  if (error) return failureCallback(error)
 
-      successCallback(
-        (data || [])
-          .filter(e => e.status !== "cancelado")
-          .map(e => ({
-            id: e.id,
-            title: window.innerWidth < 768
-              ? e.cliente
-              : `${e.cliente} - ${e.procedimento}`,
-            start: e.inicio,
-            end: e.fim,
-            backgroundColor: gerarPastel(e.cor),
-            borderColor: e.cor,
-            textColor: "#333",
-            extendedProps: e
-          }))
-      )
-    }
+  successCallback(
+    (data || [])
+      .filter(e => e.status !== "cancelado")
+      .map(e => {
+
+        const prof = profissionaisCache.find(p => p.id == e.profissional)
+        const cor = prof?.cor || "#d4af37"
+
+        return {
+          id: e.id,
+          title: window.innerWidth < 768
+            ? e.cliente
+            : `${e.cliente} - ${e.procedimento}`,
+          start: e.inicio,
+          end: e.fim,
+
+          backgroundColor: gerarPastel(cor),
+          borderColor: cor,
+          textColor: "#333",
+
+          extendedProps: e
+        }
+      })
+  )
+}
 
   })
 
@@ -337,3 +363,116 @@ document.addEventListener("keydown", function (e) {
 // DEBUG MOBILE MODAIS
 // ==========================
 document.addEventListener("touchstart", () => {}, { passive: true })
+
+// ==========================
+// SALVAR AGENDAMENTO
+// ==========================
+
+window.salvar = async function () {
+
+  console.log("SALVAR AGENDAMENTO OK")
+
+  const cliente = document.getElementById("cliente")?.value
+  const telefone = document.getElementById("telefone")?.value
+  const procedimento = document.getElementById("procedimento")?.value
+  const profissional = document.getElementById("profissional")?.value
+  const data = document.getElementById("data")?.value
+  const hora = document.getElementById("hora")?.value
+  const fim = document.getElementById("fim")?.value
+
+  const { error } = await window.sb
+    .from("agendamentos")
+    .insert([{
+      cliente,
+      telefone,
+      procedimento,
+      profissional,
+      inicio: `${data}T${hora}:00`,
+      fim: `${data}T${fim}:00`,
+      status: "ativo"
+    }])
+
+  if (error) {
+    console.log("ERRO SUPABASE:", error)
+    alert("Erro ao salvar agendamento")
+    return
+  }
+
+  calendar.refetchEvents()
+  fecharModal("modal")
+}
+
+// ==========================
+// SALVAR PROFISSIONAL
+// ==========================
+
+window.salvarProfissional = async function () {
+
+  const nome = document.getElementById("nomeProfissional")?.value
+  const cor = document.getElementById("corProfissional")?.value
+
+  const { error } = await window.sb
+    .from("profissionais")
+    .insert([{ nome, cor, ativo: true }])
+
+  if (error) {
+    console.log(error)
+    alert("Erro ao salvar profissional")
+    return
+  }
+
+  carregarProfissionais()
+}
+
+// ==========================
+// EDITAR PROFISSIONAL
+// ==========================
+
+window.editarProfissional = function (id) {
+
+  const prof = profissionaisCache.find(p => p.id == id)
+  if (!prof) return alert("Profissional não encontrado")
+
+  const novoNome = prompt("Novo nome:", prof.nome)
+  const novaCor = prompt("Nova cor (hex):", prof.cor)
+
+  if (!novoNome || !novaCor) return
+
+  window.sb
+    .from("profissionais")
+    .update({
+      nome: novoNome,
+      cor: novaCor
+    })
+    .eq("id", id)
+    .then(({ error }) => {
+      if (error) {
+        console.log(error)
+        alert("Erro ao editar profissional")
+        return
+      }
+
+      carregarProfissionais()
+    })
+}
+
+//* EXCLUIR PROFISSIONAL *//
+
+window.excluirProfissional = function (id) {
+
+  if (!confirm("Tem certeza que deseja excluir este profissional?")) return
+
+  window.sb
+    .from("profissionais")
+    .delete()
+    .eq("id", id)
+    .then(({ error }) => {
+      if (error) {
+        console.log(error)
+        alert("Erro ao excluir profissional")
+        return
+      }
+
+      carregarProfissionais()
+    })
+}

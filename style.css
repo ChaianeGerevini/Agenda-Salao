@@ -1,232 +1,234 @@
 /* ==========================
-RESET
+RESET - pra página não quebrar e ficar responsiva.
 ========================== */
 
 html {
-  width: 100%;
-  overflow-x: hidden;
+  width: 100%; /* ocupa toda a largura da tela */
+  overflow-x: hidden; /* impede scroll horizontal*/
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+* { /* global, tudo */
+  margin: 0; /* Remove margens padrão do navegador. */
+  padding: 0; /*Remove espaçamentos internos padrão. */
+  box-sizing: border-box; /* Ela muda como o tamanho (Width) funciona: ja inclui tudo*/
 }
+
+/* corpo da página*/
 
 body {
-  width: 100%;
-  overflow-x: hidden;
-  background: linear-gradient(135deg, #fff8ea, #fefefe);
-  font-family: "Segoe UI", sans-serif;
-  min-height: 100vh;
-  padding: clamp(10px, 3vw, 40px);
+  width: 100%; /* tamanho - ocupa toda a pagina*/
+  overflow-x: hidden; /* Repete proteção contra scroll lateral. */
+  background: linear-gradient(135deg, #fff8ea, #fefefe); /*cor de fundo*/
+  font-family: "Segoe UI", sans-serif; /*fonte padrao da página*/
+  min-height: 100vh; /* minima altura - faz o boddy ocupar pelo menos a altura da tela inteira*/
+  padding: clamp(10px, 3vw, 40px); /* espaço interno do elemento dividido pra ocupar min 10px, ideal 3% da tela e max 40px*/
 }
 html, body {
-  height: 100%;
+  height: 100%; /*garante que os dois ocupem altura total da tela */
 }
 
+/*CALENDÁRIO PRINCIPAL*/
 #calendar {
-  min-height: 600px;
-  height: 100%;
+  min-height: 600px; /*PRA NÃO FICAR PEQUENO DEMAIS*/
+  height: 100%; /*OCUPA ALTURA TOTAL*/
 }
 /* ==========================
-CONTAINER
+CONTAINER - TUDO Q ESTA EM <DIV CLASS="CONTAINER"> NO HTML - CAIXA PRINCIPAL DO SITE
 ========================== */
-
 .container {
-  width: 100%;
-  max-width: 1400px;
-  margin: auto;
-  padding: 0 20px;
+  width: 100%; /*OCUPA TODA A LARGURA DISPONIVEL*/
+  max-width: 1400px; /*IMPEDE DO LAYOUT FICAR GIGANTE EM TELAS MAIORES*/
+  margin: auto; /*CENTRALIZA TUDO HORIZONTALMENTE*/
+  padding: 0 20px; /*ESPAÇAMENTO INTERNO - NESTE CASO VERTICAL E HORIZONTAL PODERIA SER (TOP,RIGHT,BOTTON,LEFT)*/
 }
 
 /* ==========================
-TOPO
+TOPO - APARENCIA DO TOPO, LOGO E ETC
 ========================== */
 
 .topo {
-  background: linear-gradient(135deg, #1e1b1b, #30251a);
-  border-radius: 30px;
-  padding: 25px;
-  margin-bottom: 25px;
+  background: linear-gradient(135deg, #1e1b1b, #30251a); /*COR DO FUNDO*/
+  border-radius: 30px; /*ARREDONDAR BORDAS*/
+  padding: 25px; /*ESPAÇAMENTO INTERNO ESTA A 25PX DE TODOS OS CANTOS*/
+  margin-bottom: 25px; /*ESPAÇAMENTO EXTERNO DE BAIXO*/
 }
 
-.logo-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
+.logo-area { /*CONFIG DA AREA ONDE FICA O LOGO*/
+  display: flex; /*PRA DEIXAR LOGO E TEXTO LADO A LADO*/
+  align-items: center; /*CENTRALIZA VERTICALMENTE*/
+  justify-content: center; /*CENTRALIZA HORIZONTALMENTE O GRUPO TODO*/
+  gap: 20px; /*DISTÂNCIA ENTRE OS ITENS FLEX*/
 }
 
-#logo {
-  width: 240px;
-  border-radius: 600px;
-  object-fit: contain;
+#logo { /* DA IMAGEM EM SI*/
+  width: 260px; /*Define tamanho do logo*/
+  border-radius: 500px;/*imagem redonda*/
+  object-fit: contain;/*impede a imagem de deformar.*/
 }
 
-.topo h1 {
-  color: #d4af37;
-  font-size: 40px;
+.topo h1 { /*DO TITULO */
+  color: #d4af37; /*DEFINE COR*/
+  font-size: 40px; /*TAMANHO DA FONTE*/
 }
 
-.topo p {
-  color: #f7e7b6;
+.topo p { /*TEXTO SECUNDÁRIO editar*/
+  color: #f7e7b6; /*COR DO TEXTO*/
 }
-
+ 
 /* ==========================
-AÇÕES DESKTOP
+AÇÕES DESKTOP - estilos usados na versão computador OU notebook.
 ========================== */
 
-.acoes-agenda {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-bottom: 15px;
+.acoes-agenda { /* da div acoes agenda html novo atend. e profissionais*/
+  display: flex; /*linha horizontal - lado a lado*/
+  justify-content: flex-end; /*joga os itens para a direita*/
+  gap: 12px; /*espaço entre os itens*/
+  margin-bottom: 15px; /*espaço entre os botões e o calendário*/
 }
 
 #novoAtendimento,
-#btnProfissionais {
-  background: linear-gradient(135deg, #d4af37, #b89020);
-  color: white;
-  border: none;
-  padding: 12px 18px;
-  border-radius: 14px;
-  cursor: pointer;
-  font-weight: 600;
+#btnProfissionais { /*estilizando os dois botoes ao mesmo tempo*/
+  background: linear-gradient(135deg, #d4af37, #b89020); /*cores de fundo*/
+  color: white; /*cor do texto*/
+  border: none; /*sem borda*/
+  padding: 12px 18px; /*espaçamento interno (cima/baixo e esquerda/direita)*/
+  border-radius: 14px; /*borda arredondada*/
+  cursor: pointer; /*cursor do mouse*/
+  font-weight: 600; /*fonte meio negrito*/
 }
 
 /* ==========================
-AGENDA CONTAINER
+AGENDA CONTAINER 
 ========================== */
 
-.agenda {
-  background: white;
-  border-radius: 30px;
-  height: calc(100vh - 180px);
-  overflow: hidden;
-  padding: 10px;
+.agenda { /*div class agenda - caixa branca externa*/
+  background: white;/*cor do fundo*/
+  border-radius: 30px;/*bordas arredondadas*/
+  height: calc(100vh - 180px);/* função matematica - 100viewporth altura total da tela - 180 px*/
+  overflow: hidden;/*esconde conteudo que ultrapassa a caixa*/
+  padding: 10px;/*espaçamento interno*/
 }
 
-#calendar {
-  width: 100%;
-  height: 100%;
+#calendar { /*do fullcalendar*/
+  width: 100%; /*largura total*/
+  height: 100%; /*altura tota*/
 }
 
 /* ==========================
-FULLCALENDAR FIX (CRÍTICO)
+FULLCALENDAR - estiliza elementos do fullcalendar
 ========================== */
 
-/* header geral */
+/* dias do mês */
+.fc {
+  width: 100%; /*largura total*/
+  height: 100%; /*altura tota*/
+}
+
+/* header geral - maio de 2026 e mes semana dia*/
 .fc-header-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 10px;
-  padding: 10px 12px;
+  display: flex;/*layout flexivel*/
+  justify-content: space-between;/*distribui os 3 grupos*/
+  align-items: center;/*centraliza verticalmente*/
+  flex-wrap: nowrap;/*impede quebra de linha*/
+  gap: 10px;/*espaçamento entre os grupos*/
+  padding: 10px 12px;/*espaçamento interno*/
 }
 
-/* título mês/ano */
+/* título mês/ano - maio de 2026*/
 .fc-toolbar-title {
-  font-size: 22px;
-  font-weight: 700;
-  color: #8b6b17;
-  white-space: nowrap;
-  text-align: center;
+  font-size: 22px; /*tamanho da fonte*/
+  font-weight: 700; /*negrito forte*/
+  color: #8b6b17; /*cor do texto*/
+  white-space: nowrap; /*impede quebra de linha*/
+  text-align: center; /*centraliza verticalmente*/
 }
 
 /* grupo de botões (setas e views) */
 .fc-toolbar-chunk {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
+  display: flex; /*mantem os itens internos alinhados*/
+  align-items: center; /*centraliza verticalmente*/
+  gap: 8px; /*espaçamento entre os grupos*/
+  min-width: 0; /*permite compressão correta*/
 }
 
-/* setas prev/next */
+/* setas prev/next setas*/
 .fc .fc-button-group {
-  display: flex;
-  gap: 6px;
+  display: flex; /**/
+  gap: 6px; /**/
 }
 
-/* botões calendário */
+/* botões calendário (FULL CALENDAR)*/
 .fc .fc-button {
-  background: linear-gradient(135deg, #d4af37, #b89020);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-size: 13px;
-  padding: 6px 10px;
-  white-space: nowrap;
+  background: linear-gradient(135deg, #d4af37, #b89020); /*cor de fundo*/
+  border: none; /*sem borda*/
+  border-radius: 10px; /*arredondada*/
+  color: white; /*cor do texto*/
+  font-size: 13px; /*tamanho da fonte*/
+  padding: 6px 10px; /*espaçamento interno*/
+  white-space: nowrap; /*impede quebra de linha*/
 }
 
-/* dias do mês */
-.fc {
-  width: 100%;
-  height: 100%;
-}
-
-/* evita corte do grid */
+/* evita corte do grid - Corrige altura interna */
 .fc-view-harness {
-  height: 100% !important;
+  height: 100% !important; /*esse !importante força o css acima de tudo - neste caso esta forçando altura total*/
 }
 
 /* ==========================
-EVENTOS
+EVENTOS - os cards dos agendamentos
 ========================== */
 
-.fc-event {
-  border: none !important;
-  border-radius: 10px !important;
-  padding: 4px;
-  font-size: 12px;
-  color: #333 !important;
+.fc-event { /*div fc-event*/
+  border: none !important; /*sem borda*/
+  border-radius: 10px !important; /*arrendondada*/
+  padding: 4px; /*espaçamento interno*/
+  font-size: 12px; /*tamanho da fonte*/
+  color: #333 !important; /*cor do texto*/
 }
 
 /* ==========================
-MODAIS
+MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
 ========================== */
 
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+.modal { /*Esse é o fundo escuro inteiro da tela.*/
+  display: none; /*modal começa escondido*/
+  position: fixed; /*fixa o modal na tela inteira*/
+  inset: 0; /*modal ocupa a tela inteira*/
+  background: rgba(0,0,0,0.5); /*cor de fundo - Overlay escuro transparente*/
+  justify-content: center; /*Centraliza horizontalmente.*/
+  align-items: center; /*Centraliza verticalmente.*/
+  z-index: 9999; /*define camada, quando maior mais na frente*/
 }
 
-.modal.show {
-  display: flex;
+.modal.show { /*faz o modal abrir junto com o JS*/
+  display: flex; 
 }
 
-.modal > div {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  max-width: 90%;
+.modal > div { /*primeiro div dentro do modal*/
+  background: #fff; /*fundo do card*/
+  padding: 30px; /*espaçamento interno*/
+  border-radius: 10px; /*arrendonda as bordas*/
+  max-width: 90%; /*max da largura é 90%*/
 }
 
-.modal-content {
-  position: relative;
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  background: #fff;
+.modal-content { /*essa é a caixa principal do modal.*/
+  position: relative; /*é o pai do absolute*/
+  width: 50%; /*largura */
+  max-width: 50px; /*Limita tamanho no desktop*/
+  max-height: 90vh; /*Nunca ultrapassa 90% da altura da tela.*/
+  overflow-y: auto; /*cria scroll interno.*/
+  background: #fff; 
   border-radius: 20px;
-  padding: 20px;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
+  padding: 20px; /*espaçamento interno*/
+  box-sizing: border-box; /*serve para todos os elementos*/
+  -webkit-overflow-scrolling: touch; /*especial iphone - melhora scroll no safari*/
 }
 
-/* animação */
+/* animação - quando o modal abre aplica animação*/
 .modal.show .modal-content {
   animation: slideUp 0.25s ease;
 }
 
-@keyframes slideUp {
+@keyframes slideUp { /*define animação - modal sobe suavemente*/
   from {
     transform: translateY(40px);
     opacity: 0;
@@ -238,7 +240,7 @@ MODAIS
   }
 }
 
-/* botão fechar */
+/* BOTÂO FECHAR (X)*/
 .btn-fechar-modal {
   position: absolute;
   top: 12px;
@@ -250,7 +252,7 @@ MODAIS
   background: #f3f3f3;
   cursor: pointer;
   font-size: 18px;
-  font-weight: bold;
+  font-weight:300;
 }
 
 /* inputs */
@@ -259,7 +261,7 @@ MODAIS
 .modal-content textarea {
   width: 100%;
   margin-bottom: 12px;
-  padding: 14px;
+  padding: 8px;
   font-size: 15px;
   border-radius: 12px;
   border: 1px solid #ddd;
@@ -277,9 +279,12 @@ MODAIS
 
 /* botões */
 .modal-content button {
-  width: 100%;
+  width: 5;
+  display: flex;
+  align-items: center;
   padding: 14px;
   margin-top: 10px;
+  margin-bottom: 10px;
   border-radius: 12px;
   font-size: 15px;
 }
@@ -294,7 +299,7 @@ MODAIS
 /* ações */
 .acoes-modal {
   display: flex;
-  flex-direction: column;
+  flex-direction:row;
   gap: 10px;
 }
 
@@ -329,7 +334,8 @@ MOBILE FIX
   }
 
   #logo {
-    width: 140px;
+    width: 180px;
+    align-items: center;
   }
 
   .topo h1 {
@@ -375,45 +381,47 @@ MOBILE FIX
 
   /* FAB */
 .fab-container {
-  position: fixed !important;
+  position: fixed;
   right: 16px;
   bottom: 18px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  z-index: 2147483647 !important;
-  isolation: isolate;
-}
-body, html {
-  position: relative;
+  z-index: 9999;
 }
 
-  .fab-container button {
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    border: none;
-    background: #d4af37;
-    color: white;
-    font-size: 18px;
-  }
-.fc {
-  touch-action: auto !important;
+.fab-container button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: #d4af37;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
-.fc-scroller,
-.fc-view-harness {
-  pointer-events: auto !important;
-}
-  /* modal mobile */
+
+/* MODAL CORRETO */
 .modal {
-  align-items: center;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
   justify-content: center;
+  align-items: center;
   padding: 12px;
+  z-index: 9999;
+}
+
+.modal.show {
+  display: flex;
 }
 
 .modal-content {
   width: 100%;
-  max-width: 100%;
+  max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
   border-radius: 18px;
@@ -428,9 +436,9 @@ body, html {
 
   .card-profissional {
     display: flex;
-    justify-content: space-between;
+    justify-content:flex-start;
     align-items: center;
-    padding: 12px;
+    padding: 20px;
     border: 1px solid #eee;
     border-radius: 12px;
     margin-bottom: 10px;
@@ -440,10 +448,7 @@ body, html {
 .fab-container button {
   cursor: pointer;
   touch-action: manipulation;
-}
-.fab-container button {
   pointer-events: auto;
-  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 .fc {
@@ -452,4 +457,46 @@ body, html {
 
 .fab-container {
   z-index: 30000;
+}
+.card-profissional {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+/* lado esquerdo: bolinha + nome na mesma linha */
+.lado-esquerdo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* bolinha de cor */
+.bolinha {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* botão excluir pequeno e alinhado */
+.btn-delete {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+}
+
+.btn-delete:hover {
+  opacity: 1;
 }
