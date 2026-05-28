@@ -68,9 +68,6 @@ async function carregarProfissionais() {
   renderProfissionais()
 }
 
-// ==========================
-// LISTA PROFISSIONAIS
-// ==========================
 function renderProfissionais() {
   const container = document.getElementById("listaProfissionais")
   if (!container) return
@@ -91,7 +88,7 @@ function renderProfissionais() {
 }
 
 // ==========================
-// DETALHES EVENTO
+// DETALHES
 // ==========================
 function abrirDetalhes(evento) {
   eventoSelecionado = evento
@@ -118,7 +115,7 @@ ${fim.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
   document.querySelector(".btn-remarcar").onclick = abrirRemarcar
   document.querySelector(".btn-cancelar").onclick = cancelar
 
-  document.getElementById("viewModal").style.display = "flex"
+  abrirModal("viewModal")
 }
 
 // ==========================
@@ -135,18 +132,18 @@ window.cancelar = async function () {
   if (error) return alert("Erro ao cancelar")
 
   calendar.refetchEvents()
-  fecharView()
+  fecharModal("viewModal")
 }
 
 // ==========================
 // REMARCAR
 // ==========================
 function abrirRemarcar() {
-  document.getElementById("remarcarModal").style.display = "flex"
+  abrirModal("remarcarModal")
 }
 
 function fecharRemarcar() {
-  document.getElementById("remarcarModal").style.display = "none"
+  fecharModal("remarcarModal")
 }
 
 async function confirmarRemarcacao() {
@@ -165,69 +162,88 @@ async function confirmarRemarcacao() {
     .eq("id", eventoSelecionado.id)
 
   fecharRemarcar()
-  fecharView()
+  fecharModal("viewModal")
   calendar.refetchEvents()
 }
 
 // ==========================
-// CALENDÁRIO PRINCIPAL
+// MODAIS (PADRÃO ÚNICO)
 // ==========================
-document.addEventListener("DOMContentLoaded", function () {
+function abrirModal(id) {
 
+  const modal = document.getElementById(id)
+
+  if (!modal) return
+
+  modal.classList.add("show")
+
+  // trava scroll do fundo
+  document.body.style.overflow = "hidden"
+}
+
+function fecharModal(id) {
+
+  const modal = document.getElementById(id)
+
+  if (!modal) return
+
+  modal.classList.remove("show")
+
+  // verifica se ainda existe modal aberto
+  const aberto = document.querySelector(".modal.show")
+
+  if (!aberto) {
+    document.body.style.overflow = ""
+  }
+
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+  // ==========================
+  // BOTÕES FAB
+  // ==========================
+document.addEventListener("click", (e) => {
+
+  const novo = e.target.closest("#novoAtendimento, #fabNovo")
+  const prof = e.target.closest("#btnProfissionais, #fabProfissionais")
+
+  if (novo) {
+    abrirNovoAgendamento()
+  }
+
+  if (prof) {
+    abrirProfissionais()
+  }
+
+})
+  // ==========================
+  // CALENDÁRIO
+  // ==========================
   const calendarEl = document.getElementById("calendar")
 
+  if (!calendarEl) return
+
   calendar = new FullCalendar.Calendar(calendarEl, {
-
     locale: "pt-br",
-
-    // 📅 SEMPRE ABRE NO MÊS
     initialView: "dayGridMonth",
+    height: "100%",
 
-    height: "auto",
-    expandRows: true,
-    nowIndicator: true,
-    allDaySlot: false,
-
-    slotMinTime: "07:00:00",
-    slotMaxTime: "22:00:00",
-
-    // ❌ SEM BOTÃO "HOJE"
     headerToolbar: {
       left: "prev,next",
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay"
     },
 
-    buttonText: {
-      month: "Mês",
-      week: "Semana",
-      day: "Dia"
-    },
-
-    titleFormat: {
-      year: 'numeric',
-      month: 'long'
-    },
-
-    // ==========================
-    // CLICK DIA
-    // ==========================
     dateClick(info) {
       selectedDate = info.dateStr
       document.getElementById("data").value = info.dateStr
-      document.getElementById("modal").style.display = "flex"
+      abrirModal("modal")
     },
 
-    // ==========================
-    // CLICK EVENTO
-    // ==========================
     eventClick(info) {
       abrirDetalhes(info.event)
     },
 
-    // ==========================
-    // EVENTOS SUPABASE
-    // ==========================
     events: async function (fetchInfo, successCallback, failureCallback) {
 
       const { data, error } = await window.sb
@@ -236,54 +252,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (error) return failureCallback(error)
 
-      const eventos = data.filter(e => e.status !== "cancelado")
-
-      successCallback(eventos.map(e => ({
-        id: e.id,
-        title: window.innerWidth < 768
-          ? e.cliente
-          : `${e.cliente} - ${e.procedimento}`,
-        start: e.inicio,
-        end: e.fim,
-        backgroundColor: gerarPastel(e.cor),
-        borderColor: e.cor,
-        textColor: "#333",
-        extendedProps: {
-          cliente: e.cliente,
-          procedimento: e.procedimento,
-          profissional: e.profissional
-        }
-      })))
+      successCallback(
+        (data || [])
+          .filter(e => e.status !== "cancelado")
+          .map(e => ({
+            id: e.id,
+            title: window.innerWidth < 768
+              ? e.cliente
+              : `${e.cliente} - ${e.procedimento}`,
+            start: e.inicio,
+            end: e.fim,
+            backgroundColor: gerarPastel(e.cor),
+            borderColor: e.cor,
+            textColor: "#333",
+            extendedProps: e
+          }))
+      )
     }
+
   })
 
   calendar.render()
-
-  // ==========================
-  // RESIZE LIMPO (SEM BUG)
-  // ==========================
-  window.addEventListener("resize", () => {
-    calendar.updateSize()
-  })
-
   carregarProfissionais()
-})
 
+})
 // ==========================
-// MODAIS
+// ABRIR/FECHAR PRINCIPAIS
 // ==========================
+function abrirNovoAgendamento() {
+  abrirModal("modal")
+}
+
 function abrirProfissionais() {
-  document.getElementById("modalProfissionais").style.display = "flex"
+  abrirModal("modalProfissionais")
+}
+// ==========================
+// FECHAR MODAIS ESPECÍFICOS
+// ==========================
+function fecharNovoModal() {
+  fecharModal("modal")
+}
+
+function fecharEdit() {
+  fecharModal("editModal")
 }
 
 function fecharProfissionais() {
-  document.getElementById("modalProfissionais").style.display = "none"
+  fecharModal("modalProfissionais")
 }
 
-function fecharModal() {
-  document.getElementById("modal").style.display = "none"
+function fecharViewModal() {
+  fecharModal("viewModal")
 }
+// ==========================
+// FECHAR AO CLICAR FORA
+// ==========================
+document.addEventListener("click", function (e) {
 
-function fecharView() {
-  document.getElementById("viewModal").style.display = "none"
-}
+  const modal = document.querySelector(".modal.show")
+
+  if (modal && e.target === modal) {
+    modal.classList.remove("show")
+    document.body.style.overflow = ""
+  }
+
+}, true)
+
+// ==========================
+// FECHAR COM ESC
+// ==========================
+document.addEventListener("keydown", function (e) {
+
+  if (e.key === "Escape") {
+
+    document.querySelectorAll(".modal.show").forEach(modal => {
+      modal.classList.remove("show")
+    })
+
+    document.body.style.overflow = ""
+  }
+
+})
+// ==========================
+// DEBUG MOBILE MODAIS
+// ==========================
+document.addEventListener("touchstart", () => {}, { passive: true })

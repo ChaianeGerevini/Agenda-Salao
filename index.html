@@ -37,7 +37,7 @@ AÇÕES (DESKTOP ONLY)
 
   <button id="novoAtendimento">＋ Novo Atendimento</button>
 
-  <button id="btnProfissionais" onclick="abrirProfissionais()">
+  <button id="btnProfissionais">
     Profissionais
   </button>
 
@@ -57,13 +57,17 @@ FAB (MOBILE)
 ========================= -->
 <div class="fab-container">
 
-  <button onclick="document.getElementById('modal').style.display='flex'">
+  <button
+    id="fabNovo"
+    onclick="abrirModal('modal')"
+    type="button"
+  >
     ＋
   </button>
 
-  <button onclick="abrirProfissionais()">
-    👩‍💼
-  </button>
+<button id="fabProfissionais" type="button">
+  👩‍💼
+</button>
 
 </div>
 
@@ -92,7 +96,7 @@ MODAL AGENDAMENTO
     <input id="fim" type="time">
 
     <button onclick="salvar()">Salvar</button>
-    <button onclick="fecharModal()">Cancelar</button>
+    <button onclick="fecharNovoModal()">Cancelar</button>
 
   </div>
 
@@ -176,17 +180,130 @@ REMARCAR AGENDAMENTO
 <!-- =========================
 PROFISSIONAIS
 ========================= -->
+<!-- =========================
+FAB (MOBILE)
+========================= -->
+<div class="fab-container">
+  <button id="fabNovo">＋</button>
+  <button id="fabProfissionais">👩‍💼</button>
+</div>
+
+<!-- =========================
+MODAL AGENDAMENTO
+========================= -->
+<div id="modal" class="modal">
+
+  <div class="modal-content">
+
+    <button class="btn-fechar-modal" onclick="fecharNovoModal()">×</button>
+
+    <h2>Novo Agendamento</h2>
+
+    <input id="cliente" placeholder="Nome da cliente *">
+    <input id="telefone" placeholder="Telefone">
+    <input id="procedimento" placeholder="Procedimento *">
+
+    <select id="profissional"></select>
+
+    <label>Data *</label>
+    <input id="data" type="date">
+
+    <label>Horário de início *</label>
+    <input id="hora" type="time">
+
+    <label>Horário de fim *</label>
+    <input id="fim" type="time">
+
+    <div class="acoes-modal">
+      <button onclick="salvar()">Salvar</button>
+      <button type="button" onclick="fecharNovoModal()">Cancelar</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+EDITAR AGENDAMENTO
+========================= -->
+<div id="editModal" class="modal">
+
+  <div class="modal-content">
+
+    <button class="btn-fechar-modal" onclick="fecharEdit()">×</button>
+
+    <h2>Editar Agendamento</h2>
+
+    <input id="editCliente" placeholder="Cliente">
+    <input id="editProcedimento" placeholder="Procedimento">
+
+    <select id="editProfissional"></select>
+
+    <label>Data</label>
+    <input id="editData" type="date">
+
+    <label>Hora início</label>
+    <input id="editHora" type="time">
+
+    <label>Hora fim</label>
+    <input id="editFim" type="time">
+
+    <div class="acoes-modal">
+      <button onclick="salvarEdicao()">Salvar alterações</button>
+      <button type="button" onclick="fecharEdit()">Cancelar</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+REMARCAR AGENDAMENTO
+========================= -->
+<div id="remarcarModal" class="modal">
+
+  <div class="modal-content">
+
+    <button class="btn-fechar-modal" onclick="fecharRemarcar()">×</button>
+
+    <h2>Remarcar Agendamento</h2>
+
+    <label>Nova data</label>
+    <input id="novaData" type="date">
+
+    <label>Novo horário início</label>
+    <input id="novaHora" type="time">
+
+    <label>Novo horário fim</label>
+    <input id="novoFim" type="time">
+
+    <div class="acoes-modal">
+      <button onclick="confirmarRemarcacao()">Confirmar</button>
+      <button type="button" onclick="fecharRemarcar()">Cancelar</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+PROFISSIONAIS
+========================= -->
 <div id="modalProfissionais" class="modal">
 
   <div class="modal-content">
+
+    <button class="btn-fechar-modal" onclick="fecharProfissionais()">×</button>
 
     <h2>Profissionais</h2>
 
     <input id="nomeProfissional" placeholder="Nome">
     <input type="color" id="corProfissional" value="#d4af37">
 
-    <button onclick="salvarProfissional()">Salvar</button>
-    <button onclick="fecharProfissionais()">Fechar</button>
+    <div class="acoes-modal">
+      <button onclick="salvarProfissional()">Salvar</button>
+      <button type="button" onclick="fecharProfissionais()">Fechar</button>
+    </div>
 
     <hr>
 

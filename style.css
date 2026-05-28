@@ -21,7 +21,14 @@ body {
   min-height: 100vh;
   padding: clamp(10px, 3vw, 40px);
 }
+html, body {
+  height: 100%;
+}
 
+#calendar {
+  min-height: 600px;
+  height: 100%;
+}
 /* ==========================
 CONTAINER
 ========================== */
@@ -184,17 +191,111 @@ MODAIS
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.5);
   justify-content: center;
   align-items: center;
   z-index: 9999;
 }
 
+.modal.show {
+  display: flex;
+}
+
+.modal > div {
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+}
+
 .modal-content {
-  background: white;
-  padding: 18px;
-  border-radius: 18px;
-  width: min(95vw, 520px);
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* animação */
+.modal.show .modal-content {
+  animation: slideUp 0.25s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* botão fechar */
+.btn-fechar-modal {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f3f3;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* inputs */
+.modal-content input,
+.modal-content select,
+.modal-content textarea {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+/* labels */
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* botões */
+.modal-content button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  border-radius: 12px;
+  font-size: 15px;
+}
+
+/* título */
+.modal-content h2 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* ações */
+.acoes-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 /* ==========================
@@ -202,11 +303,11 @@ FAB MOBILE
 ========================== */
 
 .fab-container {
-  display: none;
+  display: flex;
 }
 
 /* ==========================
-MOBILE FIX (CRÍTICO)
+MOBILE FIX
 ========================== */
 
 @media (max-width: 768px) {
@@ -239,18 +340,18 @@ MOBILE FIX (CRÍTICO)
     font-size: 13px;
   }
 
-  /* remove ações desktop */
+  /* desktop actions */
   .acoes-agenda {
     display: none;
   }
 
-  /* calendário ocupa tela corretamente */
+  /* agenda */
   .agenda {
     height: calc(100vh - 110px);
     padding: 5px;
   }
 
-  /* header mobile organizado */
+  /* fullcalendar */
   .fc-header-toolbar {
     flex-wrap: wrap;
     justify-content: center;
@@ -268,20 +369,24 @@ MOBILE FIX (CRÍTICO)
     padding: 5px 8px;
   }
 
-  /* eventos menores */
   .fc-event {
     font-size: 11px !important;
   }
 
   /* FAB */
-  .fab-container {
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    right: 16px;
-    bottom: 18px;
-    gap: 10px;
-  }
+.fab-container {
+  position: fixed !important;
+  right: 16px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2147483647 !important;
+  isolation: isolate;
+}
+body, html {
+  position: relative;
+}
 
   .fab-container button {
     width: 52px;
@@ -292,4 +397,59 @@ MOBILE FIX (CRÍTICO)
     color: white;
     font-size: 18px;
   }
+.fc {
+  touch-action: auto !important;
+}
+.fc-scroller,
+.fc-view-harness {
+  pointer-events: auto !important;
+}
+  /* modal mobile */
+.modal {
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 18px;
+  padding: 20px;
+  background: #fff;
+}
+
+  /* profissionais */
+  #modalProfissionais .modal-content {
+    height: 80vh;
+  }
+
+  .card-profissional {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+}
+
+.fab-container button {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.fab-container button {
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.fc {
+  z-index: 1;
+}
+
+.fab-container {
+  z-index: 30000;
 }
