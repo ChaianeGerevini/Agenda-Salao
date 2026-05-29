@@ -49,35 +49,51 @@ Status do projeto:
  1.Notificações automáticas de agendamento
  2.Integração com WhatsApp
 
-##  Prints do sistema
-
-###  Página inicial
-![Página inicial](/assets/pagina%20inicialjpeg.jpeg)
-
----
+## Prints do sistema
 
 ### Novo agendamento
-![Novo agendamento](/assets/novo-agendamento.jpeg)
+
+<p align="center">
+  <img src="./assets/novo-agendamento.jpeg" alt="Novo agendamento" width="400">
+</p>
 
 ---
 
 ### Detalhes do agendamento
-![Detalhes do agendamento](/assets/detalhes-do-agendamento.jpeg)
+
+<p align="center">
+  <img src="./assets/detalhes-do-agendamento.jpeg" alt="detalhes agendamento" width="400">
+</p>
 
 ---
 
 ### Profissionais
-![Profissionais](/assets/Profissionais.jpeg)
+
+<p align="center">
+  <img src="./assets/Profissionais.jpeg" alt="Profissionais" width="400">
+</p>
 
 ---
 
 ### Remarcar atendimento
-![Remarcar](assets/remarcar.jpeg)
+
+<p align="center">
+  <img src="./assets/Remarcar.jpeg" alt="remarcar" width="400">
+</p>
 
 ---
 
-### Responsivo a todas as telas
+## Responsivo a todas as telas
 
-![inicio](/assets/inicio.png)
+### Tela inicial Desktop
 
-![detalhes](/assets/detalhes.jpeg.png)
+<p align="center">
+  <img src="./assets/inicio.png" alt="inicio" width="500">
+</p>
+---
+
+### Tela de detalhes Desktop
+
+<p align="center">
+  <img src="./assets/detalhes.jpeg.png" alt="detalhes" width="500">
+</p>
