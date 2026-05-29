@@ -48,3 +48,36 @@ Status do projeto:
  
  1.Notificações automáticas de agendamento
  2.Integração com WhatsApp
+
+##  Prints do sistema
+
+###  Página inicial
+![Página inicial](/assets/pagina%20inicialjpeg.jpeg)
+
+---
+
+### Novo agendamento
+![Novo agendamento](/assets/novo-agendamento.jpeg)
+
+---
+
+### Detalhes do agendamento
+![Detalhes do agendamento](/assets/detalhes-do-agendamento.jpeg)
+
+---
+
+### Profissionais
+![Profissionais](/assets/Profissionais.jpeg)
+
+---
+
+### Remarcar atendimento
+![Remarcar](assets/remarcar.jpeg)
+
+---
+
+### Responsivo a todas as telas
+
+![inicio](/assets/inicio.png)
+
+![detalhes](/assets/detalhes.jpeg.png)
