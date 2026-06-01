@@ -241,262 +241,261 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
 }
 
 /* BOTÂO FECHAR (X)*/
-.btn-fechar-modal {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 50%;
+.btn-fechar-modal { /*div class btn*/
+  position: absolute; 
+  top: 12px; /*distancia do topo*/
+  right: 12px; /*distancia da direita*/
+  width: 34px; /*largura*/
+  height: 34px; /*altura*/
+  border: none; /*sem borda*/
+  border-radius: 50%; 
   background: #f3f3f3;
   cursor: pointer;
   font-size: 18px;
-  font-weight:300;
+  font-weight:300; /*largura da fonte*/
 }
 
-/* inputs */
+/* inputs - areas para selecionar, escrever, campos*/
 .modal-content input,
 .modal-content select,
 .modal-content textarea {
   width: 100%;
-  margin-bottom: 12px;
-  padding: 8px;
-  font-size: 15px;
+  margin-bottom: 12px; /*distancia do abjeto de baixo*/
+  padding: 8px; /*espaçamento interno*/
+  font-size: 15px; 
   border-radius: 12px;
   border: 1px solid #ddd;
-  box-sizing: border-box;
+  box-sizing: border-box;/* Faz o padding e a borda serem incluídos na largura total.*/
 }
 
 /* labels */
 .modal-content label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 6px;
-  font-size: 13px;
-  color: #666;
+  display: block; /* transforma em bloco */
+  margin-top: 10px; /* distancia do topo */
+  margin-bottom: 6px; /* distancia de baixo */
+  font-size: 13px; /* tamanho da fonte */
+  color: #666; /* cor do texto */
 }
 
 /* botões */
 .modal-content button {
-  width: 5;
-  display: flex;
-  align-items: center;
-  padding: 14px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  border-radius: 12px;
-  font-size: 15px;
+  display: flex; /* Ativa Flexbox. */
+  align-items: center; /* centraliza verticalmente */
+  padding: 14px; /* espaçamento interno */
+  margin-top: 10px; /* distancia do topo */
+  margin-bottom: 10px; /* distancia de baixo */
+  border-radius: 12px; /* arredondar borda */
+  font-size: 15px; /* tamanho da fonte */
 }
 
 /* título */
 .modal-content h2 {
-  font-size: 18px;
-  margin-bottom: 15px;
-  text-align: center;
+  font-size: 18px; /* tamanho da fonte */
+  margin-bottom: 15px; /* distancia de baixo  */
+  text-align: center; /* centraliza verticalmente */
 }
 
 /* ações */
 .acoes-modal {
-  display: flex;
-  flex-direction:row;
-  gap: 10px;
+  display: flex; /* Ativa Flexbox. */
+  flex-direction:row; /* Elementos lado a lado. */
+  gap: 10px; /* espaco entre eles */
 }
 
 /* ==========================
-FAB MOBILE
+FAB MOBILE - botoe rapidos no celular
 ========================== */
 
 .fab-container {
-  display: flex;
+  display: flex; /*Transforma o container dos FABs em Flexbox.*/
 }
 
 /* ==========================
-MOBILE FIX
+MOBILE 
 ========================== */
 
-@media (max-width: 768px) {
+@media (max-width: 768px) { /*Tudo dentro dela só é aplicado em telas menores que 768px.*/
 
   body {
-    padding: 10px;
+    padding: 10px; /*espaçamento interno*/
   }
 
   .container {
-    padding: 0;
+    padding: 0; /*espaçamento interno*/
   }
 
   .topo {
-    padding: 16px;
+    padding: 16px; /*espaçamento interno*/
   }
 
   .logo-area {
-    flex-direction: column;
+    flex-direction: column; /*em coluna*/
   }
 
   #logo {
-    width: 180px;
-    align-items: center;
+    width: 180px; /*largura*/
+    align-items: center; /*centraliza verticalmente*/
   }
 
   .topo h1 {
-    font-size: 22px;
+    font-size: 22px; /*tamanho da fonte*/
   }
 
   .topo p {
-    font-size: 13px;
+    font-size: 13px; /*tamanho da fonte*/
   }
 
-  /* desktop actions */
+  /* DESKTOP actions */
   .acoes-agenda {
-    display: none;
+    display: none; /* */
   }
 
   /* agenda */
   .agenda {
-    height: calc(100vh - 110px);
-    padding: 5px;
+    height: calc(100vh - 110px); /* */
+    padding: 5px; /* */
   }
 
   /* fullcalendar */
   .fc-header-toolbar {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 6px;
+    flex-wrap: wrap; /* */
+    justify-content: center; /* */
+    gap: 6px; /* */
   }
 
   .fc-toolbar-title {
-    font-size: 16px !important;
-    width: 100%;
-    text-align: center;
+    font-size: 16px !important; /* */
+    width: 100%; /* */
+    text-align: center; /* */
   }
 
-  .fc .fc-button {
-    font-size: 11px;
-    padding: 5px 8px;
+  .fc .fc-button { /* */
+    font-size: 11px; /* */
+    padding: 5px 8px; /* */
   }
 
   .fc-event {
-    font-size: 11px !important;
+    font-size: 11px !important; /* */
   }
 
   /* FAB */
 .fab-container {
-  position: fixed;
-  right: 16px;
-  bottom: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 9999;
+  position: fixed; /* */
+  right: 16px; /* */
+  bottom: 18px; /* */
+  display: flex; /* */
+  flex-direction: column; /* */
+  gap: 10px; /* */
+  z-index: 9999; /* */
 }
 
 .fab-container button {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: none;
-  background: #d4af37;
-  color: white;
-  font-size: 18px;
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
+  width: 52px;/* */
+  height: 52px; /* */
+  border-radius: 50%; /* */
+  border: none;/* */
+  background: #d4af37;/* */
+  color: white;/* */
+  font-size: 18px; /* */
+  cursor: pointer;/* */
+  touch-action: manipulation; /* */
+  -webkit-tap-highlight-color: transparent; /* */
 }
 
 /* MODAL CORRETO */
 .modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  justify-content: center;
-  align-items: center;
-  padding: 12px;
-  z-index: 9999;
+  display: none; /* */
+  position: fixed; /* */
+  inset: 0; /* */
+  background: rgba(0,0,0,0.5);/* */
+  justify-content: center;/* */
+  align-items: center;/* */
+  padding: 12px;/* */
+  z-index: 9999;/* */
 }
 
 .modal.show {
-  display: flex;
+  display: flex; /* */
 }
 
 .modal-content {
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 18px;
-  padding: 20px;
-  background: #fff;
+  width: 100%;/* */
+  max-width: 500px;/* */
+  max-height: 90vh;/* */
+  overflow-y: auto;/* */
+  border-radius: 18px;/* */
+  padding: 20px;/* */
+  background: #fff;/* */
 }
 
   /* profissionais */
   #modalProfissionais .modal-content {
-    height: 80vh;
+    height: 80vh;/* */
   }
 
-  .card-profissional {
-    display: flex;
-    justify-content:flex-start;
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    margin-bottom: 10px;
+  .card-profissional {/* */
+    display: flex;/* */
+    justify-content:flex-start;/* */
+    align-items: center;/* */
+    padding: 20px;/* */
+    border: 1px solid #eee;/* */
+    border-radius: 12px;/* */
+    margin-bottom: 10px;/* */
   }
 }
 
-.fab-container button {
-  cursor: pointer;
-  touch-action: manipulation;
-  pointer-events: auto;
-  -webkit-tap-highlight-color: transparent;
+.fab-container button {/* */
+  cursor: pointer;/* */
+  touch-action: manipulation;/* */
+  pointer-events: auto;/* */
+  -webkit-tap-highlight-color: transparent;/* */
 }
 .fc {
-  z-index: 1;
+  z-index: 1;/* */
 }
 
-.fab-container {
-  z-index: 30000;
+.fab-container {/* */
+  z-index: 30000;/* */
 }
-.card-profissional {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+.card-profissional {/* */
+  display: flex;/* */
+  justify-content: space-between;/* */
+  align-items: center;/* */
+  padding: 12px;/* */
+  border: 1px solid #eee;/* */
+  border-radius: 12px;/* */
+  margin-bottom: 10px;/* */
+  margin-top: 10px;/* */
 }
 
 /* lado esquerdo: bolinha + nome na mesma linha */
 .lado-esquerdo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: flex;/* */
+  align-items: center;/* */
+  gap: 10px;/* */
 }
 
 /* bolinha de cor */
 .bolinha {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  width: 12px;/* */
+  height: 12px;/* */
+  border-radius: 50%;/* */
 }
 
 /* botão excluir pequeno e alinhado */
 .btn-delete {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0.7;
+  width: 28px;/* */
+  height: 28px;/* */
+  border: none;/* */
+  background: transparent;/* */
+  font-size: 14px;/* */
+  cursor: pointer;/* */
+  display: flex; /* */
+  align-items: center; /* centraliza vertical*/
+  justify-content: center; /* centraliza horizontal*/
+  opacity: 0.7; /* o quao transparente é*/
 }
 
-.btn-delete:hover {
-  opacity: 1;
+.btn-delete:hover { /* botão excluir animacao */
+  opacity: 1; /* o quao transparente é*/
 }

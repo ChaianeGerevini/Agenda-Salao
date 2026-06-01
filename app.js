@@ -380,6 +380,40 @@ window.salvar = async function () {
   const hora = document.getElementById("hora")?.value
   const fim = document.getElementById("fim")?.value
 
+  const inicioNovo = new Date(`${data}T${hora}:00`)
+  const fimNovo = new Date(`${data}T${fim}:00`)
+
+  // Busca agendamentos do mesmo profissional
+  const { data: agendamentos, error: erroBusca } = await window.sb
+    .from("agendamentos")
+    .select("*")
+    .eq("profissional", profissional)
+    .neq("status", "cancelado")
+
+  if (erroBusca) {
+    console.log(erroBusca)
+    alert("Erro ao validar horários")
+    return
+  }
+
+  // Verifica conflito
+  const conflito = (agendamentos || []).some(a => {
+
+    const inicioExistente = new Date(a.inicio)
+    const fimExistente = new Date(a.fim)
+
+    return (
+      inicioNovo < fimExistente &&
+      fimNovo > inicioExistente
+    )
+  })
+
+  if (conflito) {
+    alert("Este profissional já possui atendimento neste horário.")
+    return
+  }
+
+  // Salva
   const { error } = await window.sb
     .from("agendamentos")
     .insert([{
