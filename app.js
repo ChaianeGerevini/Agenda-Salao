@@ -118,6 +118,7 @@ ${fim.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
     <div><b>Cliente:</b> ${d.cliente || "-"}</div>
     <div><b>Procedimento:</b> ${d.procedimento || "-"}</div>
     <div><b>Profissional:</b> ${nomeProfissional}</div>
+    <div><b>Valor:</b> R$ ${Number(d.valor || 0).toFixed(2)}</div>
     <div><b>Horário:</b> ${hora}</div>
   `
 
@@ -208,13 +209,19 @@ function fecharModal(id) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // ==========================
-  // BOTÕES FAB
-  // ==========================
+// ==========================
+// BOTÕES NAV
+// ==========================
 document.addEventListener("click", (e) => {
 
-  const novo = e.target.closest("#novoAtendimento, #fabNovo")
-  const prof = e.target.closest("#btnProfissionais, #fabProfissionais")
+  const agenda = e.target.closest("#navAgenda")
+  const novo = e.target.closest("#navNovo")
+  const prof = e.target.closest("#navProfissionais")
+  const gestao = e.target.closest("#navGestao")
+
+  if (agenda) {
+    fecharTodosModais()
+  }
 
   if (novo) {
     abrirNovoAgendamento()
@@ -222,6 +229,10 @@ document.addEventListener("click", (e) => {
 
   if (prof) {
     abrirProfissionais()
+  }
+
+  if (gestao) {
+    carregarGestao()
   }
 
 })
@@ -369,13 +380,170 @@ calendar.render()
 // ==========================
 // ABRIR/FECHAR PRINCIPAIS
 // ==========================
+function fecharTodosModais() {
+
+  document.querySelectorAll(".modal.show")
+    .forEach(modal => {
+      modal.classList.remove("show")
+    })
+
+  document.body.style.overflow = ""
+}
+
+
 function abrirNovoAgendamento() {
+
+  fecharTodosModais()
   abrirModal("modal")
+
 }
 
 function abrirProfissionais() {
+
+  fecharTodosModais()
   abrirModal("modalProfissionais")
+
 }
+
+function carregarGestao() {
+
+  fecharTodosModais()
+  abrirModal("modalSenhaGestao")
+
+}
+
+async function validarSenhaGestao() {
+
+  const senha =
+    document.getElementById("senhaGestao").value
+
+  if (senha !== "123456") {
+    return alert("Senha inválida")
+  }
+
+  fecharModal("modalSenhaGestao")
+const { data, error } = await window.sb
+  .from("agendamentos")
+  .select("*")
+
+  .neq("status", "cancelado")
+
+  if (error) {
+    console.log(error)
+    return
+  }
+
+  const hoje = new Date()
+
+  let totalHoje = 0
+  let totalSemana = 0
+  let totalMes = 0
+
+  data.forEach(a => {
+
+    const valor = Number(a.valor || 0)
+
+    const dataAg = new Date(a.inicio)
+
+    const mesmoDia =
+      dataAg.toDateString() === hoje.toDateString()
+
+    const semana =
+      (hoje - dataAg) <= 7 * 24 * 60 * 60 * 1000
+
+    const mesmoMes =
+      dataAg.getMonth() === hoje.getMonth() &&
+      dataAg.getFullYear() === hoje.getFullYear()
+
+    if (mesmoDia) totalHoje += valor
+
+    if (semana) totalSemana += valor
+
+    if (mesmoMes) totalMes += valor
+
+  })
+
+  document.getElementById("fatHoje").innerText =
+    `R$ ${totalHoje.toFixed(2)}`
+
+  document.getElementById("fatSemana").innerText =
+    `R$ ${totalSemana.toFixed(2)}`
+
+  document.getElementById("fatMes").innerText =
+    `R$ ${totalMes.toFixed(2)}`
+
+
+const lista =
+document.getElementById("listaFaturamento")
+
+lista.innerHTML = ""
+
+const agrupado = {}
+
+data.forEach(a => {
+
+  const profissional = profissionaisCache.find(
+    p => p.id == a.profissional
+  )
+
+  const nome =
+    profissional?.nome || "Sem profissional"
+
+  if (!agrupado[nome]) {
+    agrupado[nome] = []
+  }
+
+  agrupado[nome].push(a)
+
+})
+Object.entries(agrupado).forEach(([nome, itens]) => {
+
+  let totalProfissional = 0
+
+  let html = `
+    <div class="grupo-faturamento">
+      <h3>${nome}</h3>
+  `
+
+  itens.forEach(a => {
+
+    const valor = Number(a.valor || 0)
+
+    totalProfissional += valor
+
+    html += `
+      <div class="linha-fat">
+
+        <span>${a.cliente}</span>
+
+        <span>
+          R$ ${valor.toFixed(2)}
+        </span>
+
+      </div>
+    `
+  })
+
+  html += `
+      <hr>
+
+      <b>
+        Total:
+        R$ ${totalProfissional.toFixed(2)}
+      </b>
+
+    </div>
+  `
+
+  lista.innerHTML += html
+
+})
+
+fecharTodosModais()
+abrirModal("modalGestao")
+
+}
+
 // ==========================
 // FECHAR MODAIS ESPECÍFICOS
 // ==========================
@@ -439,6 +607,7 @@ window.salvar = async function () {
   const cliente = document.getElementById("cliente")?.value
   const telefone = document.getElementById("telefone")?.value
   const procedimento = document.getElementById("procedimento")?.value
+  const valor = parseFloat( document.getElementById("valor")?.value) || 0
   const profissional = document.getElementById("profissional")?.value
   const data = document.getElementById("data")?.value
   const hora = document.getElementById("hora")?.value
@@ -484,6 +653,7 @@ window.salvar = async function () {
       cliente,
       telefone,
       procedimento,
+      valor,
       profissional,
       inicio: `${data}T${hora}:00`,
       fim: `${data}T${fim}:00`,

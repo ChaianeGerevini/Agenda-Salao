@@ -31,43 +31,11 @@ TOPO
 </header>
 
 <!-- =========================
-AÇÕES (DESKTOP ONLY)
-========================= -->
-<div class="acoes-agenda">
-
-  <button id="novoAtendimento">＋ Novo Atendimento</button>
-
-  <button id="btnProfissionais">
-    Profissionais
-  </button>
-
-</div>
-
-<!-- =========================
 CALENDÁRIO
 ========================= -->
 <section class="agenda">
   <div id="calendar"></div>
 </section>
-
-</div>
-
-<!-- =========================
-FAB (MOBILE)
-========================= -->
-<div class="fab-container">
-
-  <button
-    id="fabNovo"
-    onclick="abrirModal('modal')"
-    type="button"
-  >
-    ＋
-  </button>
-
-<button id="fabProfissionais" type="button">
-  👩‍💼
-</button>
 
 </div>
 
@@ -85,7 +53,7 @@ MODAL AGENDAMENTO - Desktop
     <input id="cliente" placeholder="Nome da cliente *">
     <input id="telefone" placeholder="Telefone">
     <input id="procedimento" placeholder="Procedimento *">
-
+<input id="valor" type="number" step="0.01" placeholder="Valor do atendimento"/>
     <select id="profissional"></select>
 
     <label>Data *</label>
@@ -181,15 +149,6 @@ REMARCAR AGENDAMENTO
 
   </div>
 
-</div>
-
-
-<!-- =========================
-FAB (MOBILE)
-========================= -->
-<div class="fab-container">
-  <button id="fabNovo">＋</button>
-  <button id="fabProfissionais">👩‍💼</button>
 </div>
 
 
@@ -301,8 +260,103 @@ PROFISSIONAIS - Desktop
 
 </div>
 
+<!-- =========================
+MODAL GESTAO
+========================= -->
+<div id="modalSenhaGestao" class="modal">
 
+  <div class="modal-content modal-senha">
 
+    <h2>🔒 Área Restrita</h2>
+
+    <p>Informe a senha da gestão</p>
+
+    <input
+      type="password"
+      id="senhaGestao"
+      placeholder="Senha"
+    >
+
+    <div class="acoes-modal">
+      <button onclick="validarSenhaGestao()">
+        Entrar
+      </button>
+    </div>
+
+  </div>
+
+</div>
+<!-- =========================
+GESTÃO / FATURAMENTO
+========================= -->
+<div id="modalGestao" class="modal">
+
+  <div class="modal-content">
+
+    <button
+      class="btn-fechar-modal"
+      onclick="fecharModal('modalGestao')">
+      ×
+    </button>
+
+    <h2>Gestão</h2>
+
+  <div class="cards-faturamento">
+
+  <div class="card-fat">
+    <div class="card-icon">📅</div>
+    <small>Hoje</small>
+    <h3 id="fatHoje">R$ 0,00</h3>
+  </div>
+
+  <div class="card-fat">
+    <div class="card-icon">📊</div>
+    <small>Semana</small>
+    <h3 id="fatSemana">R$ 0,00</h3>
+  </div>
+
+  <div class="card-fat">
+    <div class="card-icon">💰</div>
+    <small>Mês</small>
+    <h3 id="fatMes">R$ 0,00</h3>
+  </div>
+
+</div>
+
+</div>
+
+    <div id="listaFaturamento"></div>
+
+  </div>
+
+</div>
+
+<!-- =========================
+nav inferior
+========================= -->
+<nav class="bottom-nav">
+
+  <button id="navAgenda">
+    <span>📅</span>
+    <small>Agenda</small>
+  </button>
+
+  <button id="navNovo">
+    <span>➕</span>
+    <small>Novo</small>
+  </button>
+
+  <button id="navProfissionais">
+    <span>👥</span>
+    <small>Profissionais</small>
+  </button>
+
+  <button id="navGestao">
+    <span>📊</span>
+    <small>Gestão</small>
+  </button>
+
+</nav>
 <!-- =========================
 SCRIPTS
 ========================= -->
