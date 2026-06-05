@@ -208,13 +208,19 @@ function fecharModal(id) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
 
-  // ==========================
-  // BOTÕES FAB
-  // ==========================
+// ==========================
+// BOTÕES NAV
+// ==========================
 document.addEventListener("click", (e) => {
 
-  const novo = e.target.closest("#novoAtendimento, #fabNovo")
-  const prof = e.target.closest("#btnProfissionais, #fabProfissionais")
+  const agenda = e.target.closest("#navAgenda")
+  const novo = e.target.closest("#navNovo")
+  const prof = e.target.closest("#navProfissionais")
+  const gestao = e.target.closest("#navGestao")
+
+  if (agenda) {
+    fecharTodosModais()
+  }
 
   if (novo) {
     abrirNovoAgendamento()
@@ -222,6 +228,10 @@ document.addEventListener("click", (e) => {
 
   if (prof) {
     abrirProfissionais()
+  }
+
+  if (gestao) {
+    abrirGestao()
   }
 
 })
@@ -369,12 +379,36 @@ calendar.render()
 // ==========================
 // ABRIR/FECHAR PRINCIPAIS
 // ==========================
+function fecharTodosModais() {
+
+  document.querySelectorAll(".modal.show")
+    .forEach(modal => {
+      modal.classList.remove("show")
+    })
+
+  document.body.style.overflow = ""
+}
+
+
 function abrirNovoAgendamento() {
+
+  fecharTodosModais()
   abrirModal("modal")
+
 }
 
 function abrirProfissionais() {
+
+  fecharTodosModais()
   abrirModal("modalProfissionais")
+
+}
+
+function abrirGestao() {
+
+  fecharTodosModais()
+  abrirModal("modalGestao")
+
 }
 // ==========================
 // FECHAR MODAIS ESPECÍFICOS

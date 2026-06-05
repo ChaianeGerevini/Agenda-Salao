@@ -81,13 +81,14 @@ AÇÕES DESKTOP - estilos usados na versão computador OU notebook.
 
 .acoes-agenda { /* da div acoes agenda html novo atend. e profissionais*/
   display: flex; /*linha horizontal - lado a lado*/
-  justify-content: flex-end; /*joga os itens para a direita*/
+  flex-wrap: wrap; /**/
   gap: 12px; /*espaço entre os itens*/
   margin-bottom: 15px; /*espaço entre os botões e o calendário*/
 }
 
 #novoAtendimento,
-#btnProfissionais { /*estilizando os dois botoes ao mesmo tempo*/
+#btnProfissionais,
+#btnGestao { /*estilizando os dois botoes ao mesmo tempo*/
   background: linear-gradient(135deg, #d4af37, #b89020); /*cores de fundo*/
   color: white; /*cor do texto*/
   border: none; /*sem borda*/
@@ -101,19 +102,22 @@ AÇÕES DESKTOP - estilos usados na versão computador OU notebook.
 AGENDA CONTAINER 
 ========================== */
 
-.agenda { /*div class agenda - caixa branca externa*/
-  background: white;/*cor do fundo*/
-  border-radius: 30px;/*bordas arredondadas*/
-  height: calc(100vh - 180px);/* função matematica - 100viewporth altura total da tela - 180 px*/
-  overflow: hidden;/*esconde conteudo que ultrapassa a caixa*/
-  padding: 10px;/*espaçamento interno*/
+.agenda {
+  background: white;
+  border-radius: 30px;
+
+  min-height: calc(100vh - 180px);
+
+  padding: 10px;
 }
 
 #calendar { /*do fullcalendar*/
   width: 100%; /*largura total*/
-  height: 100%; /*altura tota*/
-}
 
+}
+.fc-scroller {
+  overscroll-behavior: contain;
+}
 /* ==========================
 FULLCALENDAR - estiliza elementos do fullcalendar
 ========================== */
@@ -196,7 +200,7 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
   background: rgba(0,0,0,0.5); /*cor de fundo - Overlay escuro transparente*/
   justify-content: center; /*Centraliza horizontalmente.*/
   align-items: center; /*Centraliza verticalmente.*/
-  z-index: 9999; /*define camada, quando maior mais na frente*/
+  z-index: 10000; /*define camada, quando maior mais na frente*/
 }
 
 .modal.show { /*faz o modal abrir junto com o JS*/
@@ -210,17 +214,25 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
   max-width: 90%; /*max da largura é 90%*/
 }
 
-.modal-content { /*essa é a caixa principal do modal.*/
-  position: relative; /*é o pai do absolute*/
-  width: 50%; /*largura */
-  max-width: 50px; /*Limita tamanho no desktop*/
-  max-height: 90vh; /*Nunca ultrapassa 90% da altura da tela.*/
-  overflow-y: auto; /*cria scroll interno.*/
-  background: #fff; 
+.modal-content {
+  position: relative;
+
+  width: 90%;
+  max-width: 900px;
+
+  max-height: 90vh;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  background: #fff;
   border-radius: 20px;
-  padding: 20px; /*espaçamento interno*/
-  box-sizing: border-box; /*serve para todos os elementos*/
-  -webkit-overflow-scrolling: touch; /*especial iphone - melhora scroll no safari*/
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  -webkit-overflow-scrolling: touch;
 }
 
 /* animação - quando o modal abre aplica animação*/
@@ -302,13 +314,6 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
   gap: 10px; /* espaco entre eles */
 }
 
-/* ==========================
-FAB MOBILE - botoe rapidos no celular
-========================== */
-
-.fab-container {
-  display: flex; /*Transforma o container dos FABs em Flexbox.*/
-}
 
 /* ==========================
 MOBILE 
@@ -318,6 +323,7 @@ MOBILE
 
   body {
     padding: 10px; /*espaçamento interno*/
+    overscroll-behavior-y: auto;
   }
 
   .container {
@@ -345,15 +351,26 @@ MOBILE
     font-size: 13px; /*tamanho da fonte*/
   }
 
+#novoAtendimento,
+#btnProfissionais,
+#btnGestao {
+  width: 100%;
+  padding: 14px;
+  font-size: 14px;
+}
+
   /* DESKTOP actions */
-  .acoes-agenda {
-    display: none; /* */
-  }
+.acoes-agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
   /* agenda */
   .agenda {
-    height: calc(100vh - 110px); /* */
-    padding: 5px; /* */
+     min-height: calc(100vh - 110px);
+  padding: 5px;
   }
 
   /* fullcalendar */
@@ -378,29 +395,9 @@ MOBILE
     font-size: 11px !important; /* */
   }
 
-  /* FAB */
-.fab-container {
-  position: fixed; /* */
-  right: 16px; /* */
-  bottom: 18px; /* */
-  display: flex; /* */
-  flex-direction: column; /* */
-  gap: 10px; /* */
-  z-index: 9999; /* */
-}
 
-.fab-container button {
-  width: 52px;/* */
-  height: 52px; /* */
-  border-radius: 50%; /* */
-  border: none;/* */
-  background: #d4af37;/* */
-  color: white;/* */
-  font-size: 18px; /* */
-  cursor: pointer;/* */
-  touch-action: manipulation; /* */
-  -webkit-tap-highlight-color: transparent; /* */
-}
+
+
 
 /* MODAL CORRETO */
 .modal {
@@ -429,7 +426,8 @@ MOBILE
 }
 
   /* profissionais */
-  #modalProfissionais .modal-content {
+  #modalProfissionais .modal-content,
+  #modalGestao .modal-content {
     height: 80vh;/* */
   }
 
@@ -444,19 +442,10 @@ MOBILE
   }
 }
 
-.fab-container button {/* */
-  cursor: pointer;/* */
-  touch-action: manipulation;/* */
-  pointer-events: auto;/* */
-  -webkit-tap-highlight-color: transparent;/* */
-}
 .fc {
   z-index: 1;/* */
 }
 
-.fab-container {/* */
-  z-index: 30000;/* */
-}
 .card-profissional {/* */
   display: flex;/* */
   justify-content: space-between;/* */
@@ -635,4 +624,66 @@ MOBILE
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.bottom-nav{
+  display:none;
+}
+
+@media (max-width:768px){
+
+  .bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    background:#fff;
+
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+
+    padding:12px 0;
+
+    border-top:1px solid #eee;
+
+    box-shadow:0 -2px 10px rgba(0,0,0,.08);
+
+    z-index:1000;
+  }
+
+  .bottom-nav button{
+    border:none;
+    background:none;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:4px;
+
+    color:#555;
+  }
+
+  .bottom-nav span{
+    font-size:20px;
+  }
+
+  .bottom-nav small{
+    font-size:11px;
+  }
+
+  .agenda{
+    padding-bottom:70px;
+  }
+}
+.modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: #d4af37;
+  border-radius: 20px;
 }

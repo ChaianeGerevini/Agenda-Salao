@@ -33,15 +33,7 @@ TOPO
 <!-- =========================
 AÇÕES (DESKTOP ONLY)
 ========================= -->
-<div class="acoes-agenda">
 
-  <button id="novoAtendimento">＋ Novo Atendimento</button>
-
-  <button id="btnProfissionais">
-    Profissionais
-  </button>
-
-</div>
 
 <!-- =========================
 CALENDÁRIO
@@ -49,25 +41,6 @@ CALENDÁRIO
 <section class="agenda">
   <div id="calendar"></div>
 </section>
-
-</div>
-
-<!-- =========================
-FAB (MOBILE)
-========================= -->
-<div class="fab-container">
-
-  <button
-    id="fabNovo"
-    onclick="abrirModal('modal')"
-    type="button"
-  >
-    ＋
-  </button>
-
-<button id="fabProfissionais" type="button">
-  👩‍💼
-</button>
 
 </div>
 
@@ -185,15 +158,6 @@ REMARCAR AGENDAMENTO
 
 
 <!-- =========================
-FAB (MOBILE)
-========================= -->
-<div class="fab-container">
-  <button id="fabNovo">＋</button>
-  <button id="fabProfissionais">👩‍💼</button>
-</div>
-
-
-<!-- =========================
 EDITAR AGENDAMENTO
 ========================= -->
 <div id="editModal" class="modal">
@@ -301,8 +265,56 @@ PROFISSIONAIS - Desktop
 
 </div>
 
+<!-- =========================
+MODAL GESTAO
+========================= -->
 
+<div id="modalGestao" class="modal">
 
+  <div class="modal-content">
+
+    <button
+      class="btn-fechar-modal"
+      onclick="fecharModal('modalGestao')">
+      ×
+    </button>
+
+    <h2>📊 Gestão</h2>
+
+    <p>Faturamento Hoje: R$ 0,00</p>
+    <p>Faturamento Semana: R$ 0,00</p>
+    <p>Faturamento Mês: R$ 0,00</p>
+
+  </div>
+
+</div>
+
+<!-- =========================
+nav inferior
+========================= -->
+<nav class="bottom-nav">
+
+  <button id="navAgenda">
+    <span>📅</span>
+    <small>Agenda</small>
+  </button>
+
+  <button id="navNovo">
+    <span>➕</span>
+    <small>Novo</small>
+  </button>
+
+  <button id="navProfissionais">
+    <span>👥</span>
+    <small>Profissionais</small>
+  </button>
+
+  <button id="navGestao">
+    <span>📊</span>
+    <small>Gestão</small>
+  </button>
+
+</nav>
 <!-- =========================
 SCRIPTS
 ========================= -->
