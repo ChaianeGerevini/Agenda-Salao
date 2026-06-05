@@ -272,7 +272,7 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
 .modal-content select,
 .modal-content textarea {
   width: 100%;
-  margin-bottom: 12px; /*distancia do abjeto de baixo*/
+  margin-bottom: 10px; /*distancia do abjeto de baixo*/
   padding: 8px; /*espaçamento interno*/
   font-size: 15px; 
   border-radius: 12px;
@@ -686,4 +686,97 @@ MOBILE
 .modal-content::-webkit-scrollbar-thumb {
   background: #d4af37;
   border-radius: 20px;
+}
+/* =========================
+   MODAL GESTÃO
+========================= */
+.modal-gestao {
+  max-width: 720px;
+  width: 100%;
+}
+
+/* =========================
+   GRID FATURAMENTO
+========================= */
+.cards-faturamento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+
+/* =========================
+   CARD FATURAMENTO
+========================= */
+.card-fat {
+  background: #ffffff;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  padding: 16px;
+
+  text-align: center;
+  position: relative;
+
+  transition: all 0.2s ease;
+}
+
+.card-fat:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ÍCONE */
+.card-icon {
+  width: 42px;
+  height: 42px;
+
+  margin: 0 auto 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 20px;
+
+  background: #f6f6f6;
+  border-radius: 12px;
+}
+
+/* TEXTO */
+.card-fat small {
+  display: block;
+  color: #777;
+  font-size: 13px;
+}
+
+.card-fat h3 {
+  margin-top: 6px;
+  font-size: 20px;
+  color: #b89020;
+  font-weight: 600;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+  .cards-faturamento {
+    grid-template-columns: 1fr;
+  }
+
+  .card-fat {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .card-icon {
+    margin: 0;
+  }
+
+  .card-fat h3 {
+    margin-left: auto;
+  }
+
 }
