@@ -255,7 +255,26 @@ REMARCAR AGENDAMENTO
   </div>
 
 </div>
+<!-- =========================
+Modal do dia no calendário
+========================= -->
+<div id="modalDia" class="modal">
 
+  <div class="modal-content modal-dia">
+
+    <button
+      class="btn-close-modal"
+      onclick="fecharModal('modalDia')">
+      ✕
+    </button>
+
+    <h3>📅 Agendamentos do Dia</h3>
+
+    <div id="listaAgendamentosDia"></div>
+
+  </div>
+
+</div>
 <!-- =========================
 PROFISSIONAIS - Desktop
 ========================= -->
@@ -281,6 +300,8 @@ PROFISSIONAIS - Desktop
   </div>
 
 </div>
+
+
 
 <!-- =========================
 SCRIPTS

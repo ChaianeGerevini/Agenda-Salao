@@ -66,6 +66,10 @@ async function carregarProfissionais() {
   })
 
   renderProfissionais()
+
+if (calendar) {
+  calendar.refetchEvents()
+} 
 }
 
 function renderProfissionais() {
@@ -202,7 +206,7 @@ function fecharModal(id) {
   }
 
 }
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
   // ==========================
   // BOTÕES FAB
@@ -252,11 +256,9 @@ document.addEventListener("click", (e) => {
       right: "dayGridMonth,timeGridWeek,timeGridDay"
     },
 
-    dateClick(info) {
-      selectedDate = info.dateStr
-      document.getElementById("data").value = info.dateStr
-      abrirModal("modal")
-    },
+dateClick(info) {
+  abrirAgendamentosDoDia(info.dateStr)
+},
 
     eventClick(info) {
       abrirDetalhes(info.event)
@@ -298,10 +300,72 @@ document.addEventListener("click", (e) => {
 
   })
 
-  calendar.render()
-  carregarProfissionais()
+ await carregarProfissionais()
+calendar.render()
 
 })
+// ==========================
+// ABRIR/FECHAR dia com agendamentos pelo calendario
+// ==========================
+ async function abrirAgendamentosDoDia(dataSelecionada) {
+
+  const inicioDia = `${dataSelecionada}T00:00:00`
+  const fimDia = `${dataSelecionada}T23:59:59`
+
+  const { data, error } = await window.sb
+    .from("agendamentos")
+    .select("*")
+    .gte("inicio", inicioDia)
+    .lte("inicio", fimDia)
+    .neq("status", "cancelado")
+
+  if (error) {
+    console.log(error)
+    return alert("Erro ao buscar agendamentos")
+  }
+
+  const container = document.getElementById("listaAgendamentosDia")
+
+  if (!container) return
+
+  if (!data.length) {
+    container.innerHTML = `
+      <div class="sem-agendamentos">
+        Nenhum agendamento neste dia
+      </div>
+    `
+  } else {
+
+    container.innerHTML = data.map(a => {
+
+      const prof = profissionaisCache.find(
+        p => p.id == a.profissional
+      )
+
+      const hora = new Date(a.inicio)
+        .toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit"
+        })
+
+      return `
+  <div class="item-dia">
+
+    <b>${hora}</b>
+
+    <div class="item-dia-info">
+      <h4>${a.cliente}</h4>
+      <p>${a.procedimento}</p>
+      <p>👤 ${prof?.nome || "-"}</p>
+    </div>
+
+  </div>
+`
+    }).join("")
+  }
+
+  abrirModal("modalDia")
+}
 // ==========================
 // ABRIR/FECHAR PRINCIPAIS
 // ==========================
