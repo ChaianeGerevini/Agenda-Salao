@@ -3,6 +3,7 @@ let selectedDate = null
 let eventoSelecionado = null
 let profissionaisCache = []
 let profissionalEditando = null
+let totalSalao = 0
 
 // ==========================
 // HELPERS
@@ -36,16 +37,19 @@ async function carregarProfissionais() {
     .from("profissionais")
     .select("*")
     .eq("ativo", true)
+    
 
   if (error) return console.log(error)
 
   profissionaisCache = data || []
 
   const select = document.getElementById("profissional")
-  const editSelect = document.getElementById("editProfissional")
+const editSelect = document.getElementById("editProfissional")
+const filtroSelect = document.getElementById("filtroProfissional")
 
   if (select) select.innerHTML = `<option value="">Selecione profissional</option>`
   if (editSelect) editSelect.innerHTML = `<option value="">Selecione profissional</option>`
+  
 
   profissionaisCache.forEach(p => {
     if (select) {
@@ -63,6 +67,12 @@ async function carregarProfissionais() {
       opt.dataset.cor = p.cor
       editSelect.appendChild(opt)
     }
+    if (filtroSelect) {
+  const opt = document.createElement("option")
+  opt.value = p.id
+  opt.textContent = `⬤ ${p.nome}`
+  filtroSelect.appendChild(opt)
+}
   })
 
   renderProfissionais()
@@ -73,23 +83,36 @@ if (calendar) {
 }
 
 function renderProfissionais() {
+
   const container = document.getElementById("listaProfissionais")
   if (!container) return
 
-container.innerHTML = profissionaisCache.map(p => `
-  <div class="card-profissional">
+  container.innerHTML = profissionaisCache.map(p => `
+    <div class="card-profissional">
 
-    <div class="lado-esquerdo">
-      <div class="bolinha" style="background:${p.cor}"></div>
-      <b>${p.nome}</b>
+      <div class="lado-esquerdo">
+        <div class="bolinha" style="background:${p.cor}"></div>
+
+        <div>
+          <b>${p.nome}</b>
+          <small>${p.porcentagem || 0}%</small>
+        </div>
+      </div>
+
+      <div class="acoes-profissional">
+
+        <button class="btn-edit" onclick="abrirEditarProfissional('${p.id}')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>
+        </button>
+
+        <button class="btn-delete" onclick="excluirProfissional('${p.id}')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash2-icon lucide-trash-2"><path d="M10 11v6"/><path d="M14 11v6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        </button>
+
+      </div>
+
     </div>
-
-    <button class="btn-delete" onclick="excluirProfissional('${p.id}')">
-      🗑️
-    </button>
-
-  </div>
-`).join("")
+  `).join("")
 }
 
 // ==========================
@@ -99,6 +122,10 @@ function abrirDetalhes(evento) {
   eventoSelecionado = evento
 
   const d = evento.extendedProps || {}
+
+  const telefone = d.telefone || ""
+const cliente = d.cliente || "-"
+const procedimento = d.procedimento || "-"
 
   const inicio = new Date(evento.start)
   const fim = new Date(evento.end)
@@ -122,6 +149,8 @@ ${fim.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
     <div><b>Horário:</b> ${hora}</div>
   `
 
+  document.querySelector(".btn-whatsapp").onclick =
+  () => enviarConfirmacaoWhatsApp(eventoSelecionado.extendedProps)
   document.querySelector(".btn-remarcar").onclick = abrirRemarcar
   document.querySelector(".btn-cancelar").onclick = cancelar
 
@@ -247,6 +276,10 @@ document.addEventListener("click", (e) => {
     locale: "pt-br",
   firstDay: 0,
 
+    dayHeaderFormat: {
+    weekday: "short"
+  },
+
   buttonText: {
     today: "Hoje",
     month: "Mês",
@@ -261,31 +294,52 @@ document.addEventListener("click", (e) => {
     initialView: "dayGridMonth",
     height: "100%",
 
-    headerToolbar: {
-      left: "prev,next",
-      center: "title",
-      right: "dayGridMonth,timeGridWeek,timeGridDay"
-    },
+   headerToolbar: false,
 
 dateClick(info) {
+  irParaData(info.dateStr, "timeGridDay") // ou timeGridWeek
   abrirAgendamentosDoDia(info.dateStr)
 },
 
     eventClick(info) {
       abrirDetalhes(info.event)
     },
+    datesSet(info)
+     {
+      
+
+  const titulo =
+    document.getElementById("tituloCalendario")
+
+  if (titulo) {
+    titulo.textContent = info.view.title
+  }
+
+},
 
     events: async function (fetchInfo, successCallback, failureCallback) {
 
   const { data, error } = await window.sb
     .from("agendamentos")
     .select("*")
+    const profissionalFiltro =
+  document.getElementById("filtroProfissional")
+  ?.value
 
   if (error) return failureCallback(error)
 
   successCallback(
-    (data || [])
-      .filter(e => e.status !== "cancelado")
+(data || [])
+.filter(e => {
+
+  if (!profissionalFiltro)
+    return true
+
+  return e.profissional ==
+    profissionalFiltro
+
+})    
+  .filter(e => e.status !== "cancelado")
       .map(e => {
 
         const prof = profissionaisCache.find(p => p.id == e.profissional)
@@ -313,8 +367,66 @@ dateClick(info) {
 
  await carregarProfissionais()
 calendar.render()
+document
+  .querySelector('[data-view="dayGridMonth"]')
+  ?.classList.add("active")
+  document
+  .getElementById("filtroProfissional")
+  ?.addEventListener("change", () => {
+
+    calendar.refetchEvents()
+
+  })
+})
+
+// ==========================
+// NAVEGAÇÃO CUSTOMIZADA
+// ==========================
+
+document.getElementById("btnPrev")
+?.addEventListener("click", () => {
+
+  calendar.prev()
 
 })
+
+document.getElementById("btnNext")
+?.addEventListener("click", () => {
+
+  calendar.next()
+
+})
+
+document.getElementById("btnHoje")?.addEventListener("click", () => {
+  calendar.changeView(calendar.view.type)
+  calendar.today()
+})
+
+document
+  .querySelectorAll("[data-view]")
+  .forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+      document
+        .querySelectorAll("[data-view]")
+        .forEach(b =>
+          b.classList.remove("active")
+        )
+
+      btn.classList.add("active")
+
+    mudarViewHoje(btn.dataset.view)
+
+    })
+
+})
+function mudarViewHoje(view) {
+  if (!calendar) return
+
+  calendar.changeView(view)
+  calendar.today()
+}
 // ==========================
 // ABRIR/FECHAR dia com agendamentos pelo calendario
 // ==========================
@@ -323,12 +435,24 @@ calendar.render()
   const inicioDia = `${dataSelecionada}T00:00:00`
   const fimDia = `${dataSelecionada}T23:59:59`
 
-  const { data, error } = await window.sb
-    .from("agendamentos")
-    .select("*")
-    .gte("inicio", inicioDia)
-    .lte("inicio", fimDia)
-    .neq("status", "cancelado")
+let query = window.sb
+  .from("agendamentos")
+  .select("*")
+  .gte("inicio", inicioDia)
+  .lte("inicio", fimDia)
+  .neq("status", "cancelado")
+
+const profissionalFiltro =
+  document.getElementById("filtroProfissional")?.value
+
+if (profissionalFiltro) {
+  query = query.eq(
+    "profissional",
+    profissionalFiltro
+  )
+}
+
+const { data, error } = await query
 
   if (error) {
     console.log(error)
@@ -414,134 +538,118 @@ function carregarGestao() {
 
 async function validarSenhaGestao() {
 
-  const senha =
-    document.getElementById("senhaGestao").value
+  const senha = document.getElementById("senhaGestao")?.value
 
   if (senha !== "123456") {
-    return alert("Senha inválida")
-  }
-
-  fecharModal("modalSenhaGestao")
-const { data, error } = await window.sb
-  .from("agendamentos")
-  .select("*")
-
-  .neq("status", "cancelado")
-
-  if (error) {
-    console.log(error)
+    alert("Senha inválida")
     return
   }
 
+  fecharModal("modalSenhaGestao")
+
+  const { data, error } = await window.sb
+    .from("agendamentos")
+    .select("*")
+    .neq("status", "cancelado")
+
+  if (error) {
+    console.log("Erro Supabase:", error)
+    return
+  }
+
+  // =========================
+  // BASE DE DADOS
+  // =========================
   const hoje = new Date()
+
+  let totalBruto = 0
+  const ranking = {}
+  const profissionaisSet = new Set()
+
+  totalSalao = 0
 
   let totalHoje = 0
   let totalSemana = 0
   let totalMes = 0
 
-  data.forEach(a => {
+ data.forEach(a => {
 
-    const valor = Number(a.valor || 0)
+  const valor = Number(a.valor || 0)
+  totalBruto += valor
 
-    const dataAg = new Date(a.inicio)
+  const dataAg = new Date(a.inicio)
 
-    const mesmoDia =
-      dataAg.toDateString() === hoje.toDateString()
+  const mesmoDia =
+    dataAg.toDateString() === hoje.toDateString()
 
-    const semana =
-      (hoje - dataAg) <= 7 * 24 * 60 * 60 * 1000
+  const mesmaSemana =
+    (hoje - dataAg) <= 7 * 24 * 60 * 60 * 1000
 
-    const mesmoMes =
-      dataAg.getMonth() === hoje.getMonth() &&
-      dataAg.getFullYear() === hoje.getFullYear()
+  const mesmoMes =
+    dataAg.getMonth() === hoje.getMonth() &&
+    dataAg.getFullYear() === hoje.getFullYear()
 
-    if (mesmoDia) totalHoje += valor
+  if (mesmoDia) totalHoje += valor
+  if (mesmaSemana) totalSemana += valor
+  if (mesmoMes) totalMes += valor
 
-    if (semana) totalSemana += valor
-
-    if (mesmoMes) totalMes += valor
-
-  })
-
-  document.getElementById("fatHoje").innerText =
-    `R$ ${totalHoje.toFixed(2)}`
-
-  document.getElementById("fatSemana").innerText =
-    `R$ ${totalSemana.toFixed(2)}`
-
-  document.getElementById("fatMes").innerText =
-    `R$ ${totalMes.toFixed(2)}`
-
-
-const lista =
-document.getElementById("listaFaturamento")
-
-lista.innerHTML = ""
-
-const agrupado = {}
-
-data.forEach(a => {
-
-  const profissional = profissionaisCache.find(
+  // 👇 SÓ ISSO AQUI É NOVO (sem repetir variável)
+  const prof = profissionaisCache.find(
     p => p.id == a.profissional
   )
 
-  const nome =
-    profissional?.nome || "Sem profissional"
+  const nome = prof?.nome || "Sem profissional"
+  if (prof?.nome) {
+  profissionaisSet.add(prof.nome)
+}
+const porcentagem = 0
 
-  if (!agrupado[nome]) {
-    agrupado[nome] = []
-  }
+  const valorProfissional = valor * (porcentagem / 100)
+  const valorSalao = valor - valorProfissional
 
-  agrupado[nome].push(a)
+  // ranking profissional
+  if (!ranking[nome]) ranking[nome] = 0
+  ranking[nome] += valorProfissional
 
-})
-Object.entries(agrupado).forEach(([nome, itens]) => {
-
-  let totalProfissional = 0
-
-  let html = `
-    <div class="grupo-faturamento">
-      <h3>${nome}</h3>
-  `
-
-  itens.forEach(a => {
-
-    const valor = Number(a.valor || 0)
-
-    totalProfissional += valor
-
-    html += `
-      <div class="linha-fat">
-
-        <span>${a.cliente}</span>
-
-        <span>
-          R$ ${valor.toFixed(2)}
-        </span>
-
-      </div>
-    `
+  // salão
+  totalSalao += valorSalao
   })
 
-  html += `
-      <hr>
+  // =========================
+  // CARDS DO DASHBOARD
+  // =========================
+  const dashBruto = document.getElementById("dashBruto")
+  const dashSalao = document.getElementById("dashSalao")
+  const dashProf = document.getElementById("dashProf")
+  const dashAtend = document.getElementById("dashAtend")
 
-      <b>
-        Total:
-        R$ ${totalProfissional.toFixed(2)}
-      </b>
+  if (dashBruto) dashBruto.innerText = `R$ ${totalBruto.toFixed(2)}`
+  if (dashSalao) dashSalao.innerText = `R$ ${totalSalao.toFixed(2)}`
+  if (dashProf) dashProf.innerText = profissionaisSet.size
+  if (dashAtend) dashAtend.innerText = data.length
 
-    </div>
-  `
+  // =========================
+  // RANKING
+  // =========================
+  const rankingOrdenado = Object.entries(ranking)
+    .sort((a, b) => b[1] - a[1])
 
-  lista.innerHTML += html
+  const lista = document.getElementById("rankingEquipe")
 
-})
+  if (lista) {
+    lista.innerHTML = rankingOrdenado.map(([nome, valor], index) => `
+      <div class="rank-item">
+        <span>${index + 1}. ${nome}</span>
+        <b>R$ ${valor.toFixed(2)}</b>
+      </div>
+    `).join("")
+  }
 
-fecharTodosModais()
-abrirModal("modalGestao")
-
+  // =========================
+  // ABRIR MODAL GESTÃO
+  // =========================
+  fecharTodosModais()
+  abrirModal("modalGestao")
 }
 
 // ==========================
@@ -665,6 +773,14 @@ window.salvar = async function () {
     alert("Erro ao salvar agendamento")
     return
   }
+  document.getElementById("cliente").value = ""
+document.getElementById("telefone").value = ""
+document.getElementById("procedimento").value = ""
+document.getElementById("valor").value = ""
+document.getElementById("profissional").value = ""
+document.getElementById("data").value = ""
+document.getElementById("hora").value = ""
+document.getElementById("fim").value = ""
 
   calendar.refetchEvents()
   fecharModal("modal")
@@ -676,12 +792,13 @@ window.salvar = async function () {
 
 window.salvarProfissional = async function () {
 
-  const nome = document.getElementById("nomeProfissional")?.value
-  const cor = document.getElementById("corProfissional")?.value
+const nome = document.getElementById("nomeProfissional")?.value
+const cor = document.getElementById("corProfissional")?.value
+const porcentagem = Number(document.getElementById("porcentagemProfissional")?.value || 0)
 
   const { error } = await window.sb
     .from("profissionais")
-    .insert([{ nome, cor, ativo: true }])
+    .insert([{ nome, cor, porcentagem, ativo: true }])
 
   if (error) {
     console.log(error)
@@ -710,7 +827,8 @@ window.editarProfissional = function (id) {
     .from("profissionais")
     .update({
       nome: novoNome,
-      cor: novaCor
+      cor: novaCor,
+      porcentagem
     })
     .eq("id", id)
     .then(({ error }) => {
@@ -743,4 +861,78 @@ window.excluirProfissional = function (id) {
 
       carregarProfissionais()
     })
+}
+window.abrirEditarProfissional = function (id) {
+  const prof = profissionaisCache.find(p => p.id == id)
+  if (!prof) return alert("Profissional não encontrado")
+
+  profissionalEditando = prof
+
+  document.getElementById("editNomeProfissional").value = prof.nome
+  document.getElementById("editCorProfissional").value = prof.cor
+  document.getElementById("editPorcentagemProfissional").value = prof.porcentagem
+
+  abrirModal("modalEditarProfissional")
+}
+
+window.salvarEdicaoProfissional = async function () {
+  if (!profissionalEditando) return
+
+  const nome = document.getElementById("editNomeProfissional")?.value
+  const cor = document.getElementById("editCorProfissional")?.value
+  const porcentagem = Number(
+    document.getElementById("editPorcentagemProfissional")?.value || 0
+  )
+
+  const { error } = await window.sb
+    .from("profissionais")
+    .update({
+      nome,
+      cor,
+      porcentagem
+    })
+    .eq("id", profissionalEditando.id)
+
+  if (error) {
+    console.log(error)
+    alert("Erro ao atualizar profissional")
+    return
+  }
+
+  profissionalEditando = null
+  fecharModal("modalEditarProfissional")
+  carregarProfissionais()
+}
+function enviarConfirmacaoWhatsApp(d) {
+
+  if (!d.telefone) {
+    alert("Cliente sem telefone cadastrado")
+    return
+  }
+
+  const telefone = d.telefone.replace(/\D/g, "")
+
+  const data = new Date(d.inicio).toLocaleDateString("pt-BR")
+  const hora = new Date(d.inicio).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  })
+
+  const mensagem = `
+Olá ${d.cliente}! 
+
+Tudo pronto! Seu horário foi confirmado.
+Vai ser um prazer te receber no dia do seu atendimento.
+
+ Data: ${data}
+ Hora: ${hora}
+ Serviço: ${d.procedimento}
+
+Se precisar remarcar ou cancelar, pedimos que entre em contato com até 24h de antecedência.
+
+  `.trim()
+
+  const url = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`
+
+  window.open(url, "_blank")
 }

@@ -291,11 +291,12 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
 
 /* botões */
 .modal-content button {
-  display: flex; /* Ativa Flexbox. */
-  align-items: center; /* centraliza verticalmente */
-  padding: 14px; /* espaçamento interno */
-  margin-top: 10px; /* distancia do topo */
-  margin-bottom: 10px; /* distancia de baixo */
+  display: flex;
+  align-items: center;
+  padding: 14px;
+
+  margin-top: 0;   /* 👈 REMOVE ESPAÇO */
+  margin-bottom: 0; /* 👈 REMOVE ESPAÇO */
   border-radius: 12px; /* arredondar borda */
   font-size: 15px; /* tamanho da fonte */
 }
@@ -309,10 +310,10 @@ MODAIS - abrir e fechar de telas, scroll, overlay escuro, forms, animacao
 
 /* ações */
 .acoes-modal {
-  display: flex; /* Ativa Flexbox. */
-  flex-direction:row; /* Elementos lado a lado. */
-  gap: 10px; /* espaco entre eles */
+  display: flex;
+  flex-direction: column;
 }
+
 
 
 /* ==========================
@@ -473,22 +474,27 @@ MOBILE
 
 /* botão excluir pequeno e alinhado */
 .btn-delete {
-  width: 28px;/* */
-  height: 28px;/* */
-  border: none;/* */
-  background: transparent;/* */
-  font-size: 14px;/* */
-  cursor: pointer;/* */
-  display: flex; /* */
-  align-items: center; /* centraliza vertical*/
-  justify-content: center; /* centraliza horizontal*/
-  opacity: 0.7; /* o quao transparente é*/
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #cba630; /* 👈 isso controla o SVG */
+  opacity: 0.7;
+  padding: 0;
 }
 
-.btn-delete:hover { /* botão excluir animacao */
-  opacity: 1; /* o quao transparente é*/
+.btn-delete svg {
+  display: block;
 }
 
+.btn-delete:hover {
+  opacity: 1;
+}
 /*MODAL DE DIA NO CALENDARIO*/
 /* MODAL DIA */
 
@@ -690,9 +696,15 @@ MOBILE
 /* =========================
    MODAL GESTÃO
 ========================= */
-.modal-gestao {
-  max-width: 720px;
+#modalGestao .modal-content {
   width: 100%;
+  max-width: 900px;
+
+  max-height: 90vh;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================
@@ -704,79 +716,378 @@ MOBILE
   gap: 14px;
   margin: 20px 0;
 }
+#listaFaturamento {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  margin-top: 20px;
+}
+.grupo-faturamento {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+
+  padding: 14px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
 /* =========================
    CARD FATURAMENTO
 ========================= */
-.card-fat {
-  background: #ffffff;
-  border: 1px solid #ececec;
-  border-radius: 16px;
-  padding: 16px;
-
-  text-align: center;
-  position: relative;
-
-  transition: all 0.2s ease;
-}
-
-.card-fat:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-/* ÍCONE */
-.card-icon {
-  width: 42px;
-  height: 42px;
-
-  margin: 0 auto 10px;
-
+.dashboard {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 20px;
-
-  background: #f6f6f6;
-  border-radius: 12px;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* TEXTO */
-.card-fat small {
-  display: block;
+/* CARDS */
+.cards-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.card-dash {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+
+  transition: 0.2s;
+}
+
+.card-dash:hover {
+  transform: translateY(-3px);
+}
+
+.card-dash small {
   color: #777;
   font-size: 13px;
 }
 
-.card-fat h3 {
+.card-dash h3 {
   margin-top: 6px;
-  font-size: 20px;
   color: #b89020;
+}
+
+/* RANKING */
+.ranking {
+  background: #fff;
+  border: 1px solid #eee;
+  margin-top: 20px;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.ranking h3 {
+  margin-bottom: 12px;
+}
+
+.rank-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.rank-item:last-child {
+  border-bottom: none;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .cards-dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+/* ==========================
+HEADER DA AGENDA (ESTILO APP)
+========================== */
+
+.agenda-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:15px;
+
+  padding:15px;
+  margin-bottom:15px;
+
+  background:#fff;
+  border-radius:20px;
+
+  box-shadow:0 4px 14px rgba(0,0,0,.05);
+}
+
+.agenda-nav{
+  display:flex;
+  gap:8px;
+}
+
+.agenda-nav button{
+  border:none;
+  background:#f3f4f6;
+
+  padding:10px 14px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-size:16px;
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.agenda-nav button:hover{
+  transform:translateY(-1px);
+}
+
+.agenda-titulo{
+  flex:1;
+
+  text-align:center;
+
+  font-size:18px;
+  font-weight:700;
+
+  color:#8b6b17;
+}
+
+.agenda-tabs{
+  display:flex;
+  gap:8px;
+}
+
+.agenda-tabs button{
+  border:none;
+
+  background:#eef2ff;
+
+  padding:10px 14px;
+
+  border-radius:12px;
+
+  cursor:pointer;
+
+  font-size:13px;
+  font-weight:600;
+
+  transition:.2s;
+}
+
+.agenda-tabs button:hover{
+  transform:translateY(-1px);
+}
+
+/* botão ativo */
+.agenda-tabs button.active{
+  background:linear-gradient(
+    135deg,
+    #d4af37,
+    #b89020
+  );
+
+  color:#fff;
+}
+
+/* ==========================
+FILTRO PROFISSIONAL
+========================== */
+
+.agenda-filtros{
+  margin-bottom:15px;
+}
+
+#filtroProfissional{
+  width:250px;
+
+  padding:12px;
+
+  border:1px solid #ddd;
+  border-radius:12px;
+
+  background:#fff;
+
+  font-size:14px;
+}
+
+/* ==========================
+MOBILE
+========================== */
+
+@media (max-width:768px){
+
+  .agenda-header{
+    flex-direction:column;
+    align-items:stretch;
+
+    gap:12px;
+  }
+
+  .agenda-nav{
+    justify-content:center;
+  }
+
+  .agenda-titulo{
+    font-size:16px;
+  }
+
+  .agenda-tabs{
+    width:100%;
+  }
+
+  .agenda-tabs button{
+    flex:1;
+  }
+
+  #filtroProfissional{
+    width:100%;
+  }
+
+}
+.acoes-profissional{
+  display:flex;
+  gap:8px;
+}
+
+.btn-edit,
+.btn-delete{
+  border:none;
+  cursor:pointer;
+  padding:8px;
+  border-radius:8px;
+}
+
+.btn-edit{
+  background:#f5f5f5;
+}
+
+.btn-delete{
+  background:#fff0f0;
+}
+.btn-whatsapp {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.btn-whatsapp:hover {
+  filter: brightness(0.95);
+}
+.acoes-modal {
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.btn-acoes {
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 8px;
+  line-height: 1;
+  white-space: nowrap;
+}
+/* botão principal (confirmar) ocupa linha inteira */
+.btn-confirmar {
+  width: 100%;
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 12px;
+  border-radius: 8px;
   font-weight: 600;
 }
 
-/* =========================
-   MOBILE
-========================= */
-@media (max-width: 768px) {
-  .cards-faturamento {
-    grid-template-columns: 1fr;
-  }
+/* linha inferior (cancelar + remarcar) */
+.acoes-secundarias {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
 
-  .card-fat {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-align: left;
-  }
+.acoes-secundarias button {
+  flex: 1;
+  min-width: 0; /* evita quebra estranha */
+}
 
-  .card-icon {
-    margin: 0;
-  }
 
-  .card-fat h3 {
-    margin-left: auto;
-  }
 
+/* cores */
+.btn-cancelar {
+  background: #e74c3c;
+  color: white;
+  border: none;
+}
+
+.btn-remarcar {
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+}
+
+/* WhatsApp mais compacto */
+.btn-whatsapp {
+  background: #25D366;
+  color: white;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+
+@media (max-width: 600px) {
+.acoes-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; /* 👈 menos espaço geral */
+}
+
+  .acoes-modal button {
+    flex: 1;
+    min-width: 120px;
+  }
+.agenda-nav-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.agenda-nav-top button {
+  border: none;
+  background: #f3f4f6;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.agenda-nav-top button:hover {
+  background: #e9e9e9;
+  transform: translateY(-1px);
+}
+
+.agenda-titulo {
+  font-size: 18px;
+  font-weight: 700;
+  color: #8b6b17;
+  min-width: 160px;
+  text-align: center;
+}
+}
 }

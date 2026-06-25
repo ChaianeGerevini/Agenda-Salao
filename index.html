@@ -34,10 +34,50 @@ TOPO
 CALENDÁRIO
 ========================= -->
 <section class="agenda">
-  <div id="calendar"></div>
-</section>
+
+<div class="agenda-header">
+
+  <!-- TOPO: navegação do calendário -->
+  <div class="agenda-nav-top">
+    <button id="btnPrev">‹</button>
+
+    <div id="tituloCalendario" class="agenda-titulo">
+      junho 2026
+    </div>
+
+    <button id="btnNext">›</button>
+  </div>
+
+  <!-- ABA: views -->
+  <div class="agenda-tabs">
+
+    <button data-view="dayGridMonth">Mês</button>
+    <button data-view="timeGridWeek">Semana</button>
+    <button data-view="timeGridDay">Dia</button>
+
+  </div>
 
 </div>
+
+  <div class="agenda-filtros">
+
+    <select id="filtroProfissional">
+      <option value="">
+        Todos os profissionais
+      </option>
+    </select>
+
+  </div>
+
+  <div class="calendar-wrapper">
+<div class="calendar-wrapper">
+
+  <div id="calendar"></div>
+
+</div>
+  </div>
+
+</section>
 
 <!-- =========================
 MODAL AGENDAMENTO - Desktop
@@ -66,6 +106,7 @@ MODAL AGENDAMENTO - Desktop
     <input id="fim" type="time">
 
     <div class="acoes-modal">
+
       <button onclick="salvar()">Salvar</button>
     </div>
 
@@ -84,12 +125,23 @@ DETALHES DO EVENTO
 
     <h2>Detalhes do Agendamento</h2>
 
-    <div id="infoAgendamento"></div>
+<div id="infoAgendamento" class="info-agendamento"></div>
 
-    <div class="acoes-modal">
-      <button class="btn-acoes btn-remarcar">Remarcar</button>
-      <button class="btn-acoes btn-cancelar">Cancelar Agendamento</button>
-    </div>
+<div class="acoes-modal">
+
+  <button class="btn-whatsapp btn-acoes btn-confirmar">
+    📲 Confirmar atendimento
+  </button>
+
+  <button class="btn-remarcar btn-acoes">
+    🔁 Remarcar
+  </button>
+
+  <button class="btn-cancelar btn-acoes">
+    ❌ Cancelar
+  </button>
+
+</div>
 
   </div>
 
@@ -229,7 +281,10 @@ Modal do dia no calendário
 
     <h3><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg> Agendamentos do Dia</h3>
 
-    <div id="listaAgendamentosDia"></div>
+    <div
+  id="listaAgendamentosDia"
+  class="lista-dia">
+</div>
 
   </div>
 
@@ -246,7 +301,15 @@ PROFISSIONAIS - Desktop
     <h2>Profissionais</h2>
 
     <input id="nomeProfissional" placeholder="Nome">
+    <input
+  id="porcentagemProfissional"
+  type="number"
+  min="0"
+  max="100"
+  placeholder="% do profissional (ex: 80% para o profissional)"
+/>
     <input type="color" id="corProfissional" value="#d4af37">
+
 
     <div class="acoes-modal">
       <button onclick="salvarProfissional()">Salvar</button>
@@ -255,6 +318,43 @@ PROFISSIONAIS - Desktop
     <hr>
 
     <div id="listaProfissionais"></div>
+
+  </div>
+
+</div>
+
+<div id="modalEditarProfissional" class="modal">
+
+  <div class="modal-content">
+
+    <button
+      class="btn-fechar-modal"
+      onclick="fecharModal('modalEditarProfissional')">
+      ×
+    </button>
+
+    <h2>Editar Profissional</h2>
+
+    <input
+      id="editNomeProfissional"
+      placeholder="Nome">
+
+    <input
+      id="editPorcentagemProfissional"
+      type="number"
+      min="0"
+      max="100"
+      placeholder="% do profissional">
+
+    <input
+      type="color"
+      id="editCorProfissional">
+
+    <div class="acoes-modal">
+      <button onclick="salvarEdicaoProfissional()">
+        Salvar Alterações
+      </button>
+    </div>
 
   </div>
 
@@ -301,33 +401,47 @@ GESTÃO / FATURAMENTO
 
     <h2>Gestão</h2>
 
-  <div class="cards-faturamento">
+<div class="dashboard">
 
-  <div class="card-fat">
-    <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-check2-icon lucide-calendar-check-2"><path d="M8 2v4"/><path d="M16 2v4"/><path d="M21 14V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="M3 10h18"/><path d="m16 20 2 2 4-4"/></svg></div>
-    <small>Hoje</small>
-    <h3 id="fatHoje">R$ 0,00</h3>
+  <!-- CARDS -->
+  <div class="cards-dashboard">
+
+    <div class="card-dash">
+      <small>Faturamento Bruto</small>
+      <h3 id="dashBruto">R$ 0,00</h3>
+    </div>
+
+    <div class="card-dash">
+      <small>Faturamento Salão</small>
+      <h3 id="dashSalao">R$ 0,00</h3>
+    </div>
+
+    <div class="card-dash">
+      <small>Profissionais</small>
+      <h3 id="dashProf">0</h3>
+    </div>
+
+    <div class="card-dash">
+      <small>Atendimentos</small>
+      <h3 id="dashAtend">0</h3>
+    </div>
+
   </div>
 
-  <div class="card-fat">
-    <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-bar-big-icon lucide-chart-bar-big"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><rect x="7" y="13" width="9" height="4" rx="1"/><rect x="7" y="5" width="12" height="4" rx="1"/></svg></div>
-    <small>Semana</small>
-    <h3 id="fatSemana">R$ 0,00</h3>
+  <!-- RANKING -->
+  <div class="ranking">
+    <h3>🏆 Ranking da equipe</h3>
+    <div id="rankingEquipe"></div>
+
   </div>
-
-  <div class="card-fat">
-    <div class="card-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cba630" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-banknote-arrow-up-icon lucide-banknote-arrow-up"><path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5"/><path d="M18 12h.01"/><path d="M19 22v-6"/><path d="m22 19-3-3-3 3"/><path d="M6 12h.01"/><circle cx="12" cy="12" r="2"/></svg></div>
-    <small>Mês</small>
-    <h3 id="fatMes">R$ 0,00</h3>
-  </div>
-
-</div>
-
-</div>
-
     <div id="listaFaturamento"></div>
 
+</div>
+
+</div>
+
   </div>
+
 
 </div>
 
